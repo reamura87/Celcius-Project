@@ -1,0 +1,6 @@
+{
+  "modelFile": "celcius-q4_k_m.gguf",
+  "modelUrl": "",
+  "llamaPort": 8089,
+  "gpuLayers": 99
+}

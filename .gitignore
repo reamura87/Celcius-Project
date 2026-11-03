@@ -1,0 +1,7 @@
+node_modules/
+dist/
+web/libs/
+llama/
+tmp/
+
+Add-Content .gitignore "`nadapter/`nadapter.zip`n*.gguf`nmemory.json`nknowledge.json`nout/"

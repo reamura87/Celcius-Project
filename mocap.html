@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><title>Perekam Gerakan</title>
+<style>body{font-family:system-ui;background:#1e1e24;color:#eee;text-align:center}
+video,canvas{width:480px;position:absolute;left:50%;margin-left:-240px;transform:scaleX(-1)}
+#box{position:relative;height:370px}button,input{padding:8px;margin:4px}</style></head><body>
+<h3>Perekam Gerakan (MediaPipe Pose + Hands)</h3>
+<div id="box"><video id="v" playsinline muted></video><canvas id="o" width="480" height="360"></canvas></div>
+<input id="label" placeholder="nama gerakan, mis. melambai" value="melambai">
+<button id="rec">● Rekam</button><button id="dl">Unduh JSON</button><p id="st">memuat model…</p>
+<script type="module">
+import {PoseLandmarker,HandLandmarker,FilesetResolver,DrawingUtils} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+const fs=await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
+const base="https://storage.googleapis.com/mediapipe-models/";
+const pose=await PoseLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:base+"pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task"},runningMode:"VIDEO"});
+const hand=await HandLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:base+"hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task"},runningMode:"VIDEO",numHands:2});
+const v=document.getElementById('v');v.srcObject=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480}});await v.play();
+const c=document.getElementById('o'),x=c.getContext('2d'),du=new DrawingUtils(x);
+let rec=false,clips=[],cur=null,st=document.getElementById('st');st.textContent='siap';
+document.getElementById('rec').onclick=e=>{rec=!rec;e.target.textContent=rec?'■ Berhenti':'● Rekam';
+ if(rec)cur={label:document.getElementById('label').value,fps:30,frames:[]};else if(cur?.frames.length){clips.push(cur);st.textContent=`${clips.length} klip tersimpan`}};
+document.getElementById('dl').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(clips)],{type:'application/json'}));a.download='motion_dataset.json';a.click()};
+let last=0;
+function loop(){const now=performance.now();
+ if(now-last>=33){last=now;
+  const p=pose.detectForVideo(v,now),h=hand.detectForVideo(v,now);
+  x.clearRect(0,0,480,360);
+  p.landmarks.forEach(l=>du.drawLandmarks(l,{radius:2}));h.landmarks.forEach(l=>du.drawLandmarks(l,{radius:2,color:'#0f0'}));
+  if(rec&&p.worldLandmarks[0])cur.frames.push({t:Math.round(now),
+   pose:p.worldLandmarks[0].map(q=>[q.x,q.y,q.z,q.visibility]),
+   hands:h.handedness.map((hd,i)=>({side:hd[0].categoryName,pts:h.worldLandmarks[i].map(q=>[q.x,q.y,q.z])}))})}
+ requestAnimationFrame(loop)}
+loop();
+</script></body></html>
