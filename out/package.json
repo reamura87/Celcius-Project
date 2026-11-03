@@ -1,0 +1,24 @@
+{
+  "name": "celcius-ai",
+  "productName": "Celcius",
+  "version": "0.1.0",
+  "description": "Celcius - asisten AI berkarakter VRM",
+  "author": "Reamura",
+  "main": "main.js",
+  "scripts": {
+    "postinstall": "node scripts/copy-libs.js",
+    "start": "electron .",
+    "build": "electron-builder --win nsis",
+    "release": "npm version patch -m \"v%s\" && git push --follow-tags"
+  },
+  "build": {
+    "appId": "com.reamura.celcius",
+    "productName": "Celcius",
+    "directories": { "output": "dist" },
+    "files": ["main.js", "config.json", "web/**/*"],
+    "extraResources": [{ "from": "llama", "to": "llama" }],
+    "win": { "target": "nsis" },
+    "nsis": { "oneClick": true, "perMachine": false },
+    "publish": { "provider": "github", "owner": "GANTI_USERNAME_GITHUB", "repo": "GANTI_NAMA_REPO", "releaseType": "release" }
+  }
+}

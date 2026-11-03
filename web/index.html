@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><title>VRM AI Assistant</title>
+<style>
+body{margin:0;font-family:system-ui;background:#1e1e24;color:#eee;display:flex;height:100vh}
+#c{flex:1;position:relative}canvas{width:100%;height:100%;display:block;position:relative;z-index:1}
+#c{overflow:hidden}#bg{position:absolute;inset:0}#bg img,#bg video{width:100%;height:100%;object-fit:cover}
+#side{width:340px;display:flex;flex-direction:column;padding:10px;gap:8px;background:#26262e}
+#log{flex:1;overflow:auto;font-size:14px}#log p{margin:4px 0}.me{color:#8cf}.ai{color:#fc8}
+input,button{padding:8px;border-radius:6px;border:0;font-size:14px}button{cursor:pointer}
+</style></head><body>
+<div id="c"></div>
+<div id="side">
+ <div id="outfits" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+ <div style="display:flex;gap:6px;align-items:center;font-size:12px"><select id="voiceSel" style="flex:1;padding:6px;min-width:0"></select>nada<input id="pitch" type="range" min="0.8" max="1.8" step="0.05" style="width:70px"></div>
+ <div id="log"></div>
+ <input id="inp" placeholder="Ketik pesan… (ajari: pertanyaan => jawaban)">
+ <div style="display:flex;gap:6px"><button id="mic">🎤</button><button id="exp">Ekspor JSON</button><button id="imp">Impor JSON</button></div>
+ <input type="file" id="impFile" accept=".json" hidden>
+</div>
+<script type="importmap">{"imports":{"three":"./libs/three/build/three.module.js","three/addons/":"./libs/three/examples/jsm/","three/examples/jsm/":"./libs/three/examples/jsm/","@pixiv/three-vrm":"./libs/three-vrm/lib/three-vrm.module.min.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {FBXLoader} from 'three/addons/loaders/FBXLoader.js';
+import {VRMLoaderPlugin,VRMUtils} from '@pixiv/three-vrm';
+
+/* ===== OTAK LOKAL (tanpa API): kemiripan kata + belajar dari pengguna ===== */
+const DEFAULT=[
+ {q:"halo",a:"Halo! Aku senang kamu datang.",act:"wave"},
+ {q:"hai",a:"Hai! Apa kabar?",act:"wave"},
+ {q:"selamat pagi",a:"Selamat pagi! Semangat ya hari ini.",act:"wave"},
+ {q:"siapa kamu",a:"Aku asisten AI-mu. Aku masih belajar dari kamu."},
+ {q:"terima kasih",a:"Sama-sama!",act:"nod"}];
+let KB=JSON.parse(localStorage.getItem('kb')||'null')||DEFAULT;
+const save=()=>localStorage.setItem('kb',JSON.stringify(KB));
+const tok=s=>s.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu,'').split(/\s+/).filter(Boolean);
+function sim(a,b){const A=new Set(tok(a)),B=new Set(tok(b));if(!A.size||!B.size)return 0;
+ let n=0;A.forEach(x=>B.has(x)&&n++);return n/Math.sqrt(A.size*B.size)}
+let pending=null;
+function think(text){
+ if(pending){KB.push({q:pending,a:text});save();const p=pending;pending=null;return {a:`Oke, aku ingat: "${p}" → "${text}"`,act:"nod"}}
+ const m=text.match(/^ajari\s*:\s*(.+?)\s*=>\s*(.+)$/i);
+ if(m){KB.push({q:m[1],a:m[2]});save();return {a:"Sudah kupelajari!",act:"nod"}}
+ let best=null,s=0;for(const k of KB){const v=sim(text,k.q);if(v>s){s=v;best=k}}
+ if(best&&s>=0.5)return best;
+ pending=text;return {a:"Aku belum tahu jawabannya. Kamu mau ajari aku? Ketik jawabannya sekarang."}}
+
+/* ===== SCENE ===== */
+const box=document.getElementById('c');
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});renderer.setSize(box.clientWidth,box.clientHeight);
+renderer.setPixelRatio(devicePixelRatio);box.appendChild(renderer.domElement);
+const MODEL='celcius.vrm';   // SATU karakter tetap: taruh file VRM di folder ini dengan nama ini
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const scene=new THREE.Scene();
+const cam=new THREE.PerspectiveCamera(30,box.clientWidth/box.clientHeight,0.1,30);cam.position.set(0,1.2,3.4);cam.lookAt(0,0.85,0);
+addEventListener('resize',()=>{renderer.setSize(box.clientWidth,box.clientHeight);cam.aspect=box.clientWidth/box.clientHeight;cam.updateProjectionMatrix()});
+
+/* ===== LINGKUNGAN prosedural (tanpa file/internet), warna mengikuti jam asli ===== */
+const hr=new Date().getHours()+new Date().getMinutes()/60;
+const P=(hr<5||hr>=19)?{sky:['#0b1026','#2a2f5e'],key:0x9fb4ff,ki:1.3,lamp:1.6}
+ :hr<9?{sky:['#ffb88c','#ffe9c7'],key:0xffd2a6,ki:2.1,lamp:0.3}
+ :hr<16?{sky:['#7ec8ff','#eaf7ff'],key:0xfff4e0,ki:2.5,lamp:0}
+ :{sky:['#ff8f6b','#ffd29a'],key:0xffb680,ki:2.1,lamp:0.5};
+function gradTex(c0,c1){const c=document.createElement('canvas');c.width=2;c.height=256;const g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,256);gr.addColorStop(0,c0);gr.addColorStop(1,c1);g.fillStyle=gr;g.fillRect(0,0,2,256);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t}
+scene.background=gradTex(P.sky[0],P.sky[1]);
+const _n0=scene.children.length;
+const mk=(geo,col,rough=0.9)=>new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:col,roughness:rough}));
+const wall=mk(new THREE.PlaneGeometry(10,5),0xcbb8a3);wall.position.set(0,2.5,-2.2);wall.receiveShadow=true;scene.add(wall);
+const floor=mk(new THREE.PlaneGeometry(10,8),0x8a6a4f,0.75);floor.rotation.x=-Math.PI/2;floor.position.z=1.5;floor.receiveShadow=true;scene.add(floor);
+const rug=mk(new THREE.CircleGeometry(1.2,48),0xd98fa0,1);rug.rotation.x=-Math.PI/2;rug.position.y=0.005;rug.receiveShadow=true;scene.add(rug);
+const win=new THREE.Mesh(new THREE.PlaneGeometry(1.7,1.3),new THREE.MeshBasicMaterial({map:gradTex(P.sky[0],P.sky[1])}));win.position.set(-1.7,1.6,-2.19);scene.add(win);
+[[0,.65,1.8,.08],[0,-.65,1.8,.08],[-.85,0,.08,1.4],[.85,0,.08,1.4],[0,0,.05,1.3],[0,0,1.7,.05]].forEach(([x,y,w,h])=>{const f=mk(new THREE.BoxGeometry(w,h,0.06),0x5b4636);f.position.set(-1.7+x,1.6+y,-2.16);scene.add(f)});
+const pot=mk(new THREE.CylinderGeometry(.16,.12,.3,16),0xb5654a);pot.position.set(1.7,.15,-1.6);pot.castShadow=true;scene.add(pot);
+for(let i=0;i<7;i++){const lf=mk(new THREE.SphereGeometry(.13,12,12),0x4f9d63);lf.position.set(1.7+Math.sin(i*2.4)*.16,.45+i*.07,-1.6+Math.cos(i*2.4)*.16);lf.castShadow=true;scene.add(lf)}
+// cahaya: key (bayangan) + rim dari belakang + fill + lampu hangat
+const key=new THREE.DirectionalLight(P.key,P.ki);key.position.set(1.5,3,2.5);key.target.position.set(0,.8,0);key.castShadow=true;
+key.shadow.mapSize.set(2048,2048);key.shadow.bias=-0.0004;key.shadow.normalBias=0.02;Object.assign(key.shadow.camera,{left:-2,right:2,top:3,bottom:-1});
+const rim=new THREE.DirectionalLight(0xaecbff,1.2);rim.position.set(-2,2,-2.5);
+const lamp=new THREE.PointLight(0xffc680,P.lamp*8,6);lamp.position.set(1.3,1.5,-1);
+scene.add(key,key.target,rim,lamp,new THREE.HemisphereLight(new THREE.Color(P.sky[1]),0x7a5a44,0.9));
+// debu cahaya melayang
+const dg=new THREE.BufferGeometry(),dp=[];for(let i=0;i<90;i++)dp.push((Math.random()-.5)*5,Math.random()*3,-2+Math.random()*3.5);
+dg.setAttribute('position',new THREE.Float32BufferAttribute(dp,3));
+const dc=document.createElement('canvas');dc.width=dc.height=32;{const g=dc.getContext('2d'),r=g.createRadialGradient(16,16,0,16,16,16);r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,32,32)}
+const dust=new THREE.Points(dg,new THREE.PointsMaterial({size:.05,map:new THREE.CanvasTexture(dc),transparent:true,opacity:.5,depthWrite:false}));scene.add(dust);
+const roomObjs=scene.children.slice(_n0).filter(o=>o.isMesh||o.isPoints);
+
+/* ===== MODEL TETAP + GANTI PAKAIAN =====
+ Pakaian = mesh yang diberi nama "Outfit_<nama>_<bagian>" (mis. Outfit_Seifuku_Tops, Outfit_Casual_Bottoms) di dalam SATU file VRM. */
+let vrm=null,outfits={};
+function outfitOf(o){for(let n=o;n&&n!==vrm.scene;n=n.parent){const m=/^Outfit[_-]([^_\s]+)/i.exec(n.name||'');if(m)return m[1]}return null}
+function setOutfit(n){const key=String(n).toLowerCase();if(!outfits[key])return false;for(const k in outfits)outfits[k].forEach(o=>o.visible=(k===key));localStorage.setItem('outfit',key);return true}
+function setupOutfits(){outfits={};const names=[];
+ vrm.scene.traverse(o=>{if(!o.isMesh)return;o.castShadow=o.receiveShadow=true;o.frustumCulled=false;const k=outfitOf(o);if(k){(outfits[k.toLowerCase()]??=[]).push(o);if(!names.includes(k))names.push(k)}});
+ const el=document.getElementById('outfits');el.innerHTML='';
+ if(!names.length){const all=[];vrm.scene.traverse(o=>o.isMesh&&all.push(o.name));console.log('Mesh di model (beri awalan Outfit_<nama>_ untuk pakaian):',all);return}
+ names.forEach(n=>{const b=document.createElement('button');b.textContent='👗 '+n;b.onclick=()=>{setOutfit(n);play('nod')};el.append(b)});
+ const sv=localStorage.getItem('outfit');setOutfit(sv&&outfits[sv]?sv:names[0])}
+new GLTFLoader().register(p=>new VRMLoaderPlugin(p)).load(MODEL,g=>{
+ vrm=g.userData.vrm;VRMUtils.rotateVRM0(vrm);scene.add(vrm.scene);
+ const h=vrm.humanoid;h.getNormalizedBoneNode('leftUpperArm').rotation.z=-1.2;h.getNormalizedBoneNode('rightUpperArm').rotation.z=1.2;
+ setupOutfits()},undefined,e=>say('ai','Gagal memuat '+MODEL+'. Taruh file VRM di folder yang sama dengan index.html, beri nama itu, dan buka lewat http://localhost:8000.'));
+
+/* ===== DUNIA: latar kustom + objek FBX interaktif (diatur di world.json) ===== */
+let world={},objs=[],clickables=[],objAsk=null,held=null,song=null,dev=null,gw=0,gTarget=0,gt0=0,strumKick=0;
+const BEAT=60/90;
+const GP={ // pose main gitar [x,y,z] radian — nilai awal, perlu disetel
+ leftUpperArm:[-0.95,0,-0.95],leftLowerArm:[0,-0.9,0],leftHand:[0,0,0.2],
+ rightUpperArm:[-0.55,0,0.95],rightLowerArm:[0,1.1,0],rightHand:[0,0,-0.2]};
+function setBackground(path){
+ const bg=document.createElement('div');bg.id='bg';box.prepend(bg);
+ const vid=/\.(mp4|webm|mov)$/i.test(path),el=document.createElement(vid?'video':'img');el.src=path;
+ el.onerror=()=>say('ai','Latar "'+path+'" tidak ditemukan. Cek nama file di folder assets.');
+ if(vid){el.autoplay=el.loop=el.muted=el.playsInline=true;el.play?.().catch(()=>{})}
+ bg.append(el);scene.background=null;roomObjs.forEach(o=>o.visible=false);
+ const sc=new THREE.Mesh(new THREE.PlaneGeometry(6,6),new THREE.ShadowMaterial({opacity:0.35}));sc.rotation.x=-Math.PI/2;sc.receiveShadow=true;scene.add(sc)}
+function loadObj(o){
+ o.hold={bone:'chest',pos:[0,-0.1,0.2],rot:[0,0,0],...(o.hold||{})};objs.push(o);
+ new FBXLoader().load(o.file,fbx=>{
+  const g=new THREE.Group();g.add(fbx);
+  const sz=new THREE.Box3().setFromObject(fbx).getSize(new THREE.Vector3()),m=Math.max(sz.x,sz.y,sz.z);
+  if(m>0)fbx.scale.multiplyScalar((o.fit||1)/m);                      // ukuran dinormalkan (meter), aman dari masalah satuan Blender/FBX
+  const bb=new THREE.Box3().setFromObject(fbx),c=bb.getCenter(new THREE.Vector3());fbx.position.sub(c);   // pivot di tengah objek
+  const p=o.pos||[0,0,0],r=o.rot||[0,0,0];
+  g.position.set(p[0],p[1]+(bb.max.y-bb.min.y)/2,p[2]);g.rotation.set(...r.map(d=>d*Math.PI/180));g.userData.objId=o.id;
+  fbx.traverse(x=>{if(x.isMesh){x.castShadow=x.receiveShadow=true}});
+  scene.add(g);o.group=g;clickables.push(g)},undefined,
+  ()=>say('ai','Objek "'+o.file+'" tidak ditemukan/gagal dimuat. Taruh file FBX di folder assets.'))}
+fetch('world.json').then(r=>r.ok?r.json():{}).catch(()=>({})).then(w=>{world=w||{};if(world.background)setBackground(world.background);(world.objects||[]).forEach(loadObj)});
+
+// klik objek
+const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();
+function hitObj(e){const r=renderer.domElement.getBoundingClientRect();mouse.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);ray.setFromCamera(mouse,cam);
+ const h=ray.intersectObjects(clickables,true)[0];if(!h)return null;let n=h.object;while(n&&n.userData.objId===undefined)n=n.parent;return objs.find(o=>o.id===n?.userData.objId)}
+renderer.domElement.addEventListener('pointermove',e=>{renderer.domElement.style.cursor=(!held&&hitObj(e))?'pointer':'default'});
+renderer.domElement.addEventListener('click',e=>{if(held)return;const o=hitObj(e);if(o&&o.ask)askObject(o)});
+function askObject(o){objAsk={o};say('ai',o.ask);speak(o.ask);play('nod');
+ const p=document.createElement('p');p.id='askBtns';
+ [['Ya',true],['Tidak',false]].forEach(([t,v])=>{const b=document.createElement('button');b.textContent=t;b.style.marginRight='6px';b.onclick=()=>{say('me',t);answerObj(v)};p.append(b)});
+ log.append(p);log.scrollTop=1e9}
+function answerObj(yes){document.getElementById('askBtns')?.remove();const o=objAsk?.o;objAsk=null;if(!o)return;
+ const r=yes?(o.yes||'Oke!'):'Oke, lain kali ya!';say('ai',r);speak(r);if(yes&&o.action==='guitar')playGuitar(o)}
+
+// gitar: suara sintetis Karplus-Strong (tanpa file audio)
+const AM=[110,164.8,220,261.6,329.6],FM=[87.3,130.8,174.6,220,261.6],CM=[130.8,164.8,196,261.6,329.6],GM=[98,123.5,146.8,196,246.9,392];
+function pluck(ac,f,when,vol){const sr=ac.sampleRate,n=Math.floor(sr*1.8),buf=ac.createBuffer(1,n,sr),d=buf.getChannelData(0),N=Math.round(sr/f),rg=new Float32Array(N);
+ for(let i=0;i<N;i++)rg[i]=Math.random()*2-1;
+ for(let i=0;i<n;i++){const j=i%N,k=(i+1)%N;d[i]=rg[j];rg[j]=0.996*0.5*(rg[j]+rg[k])}
+ const s=ac.createBufferSource();s.buffer=buf;const g=ac.createGain();g.gain.value=vol;s.connect(g).connect(ac.destination);s.start(when)}
+function startSong(){const ac=new (window.AudioContext||window.webkitAudioContext)(),prog=[AM,FM,CM,GM,AM,FM,CM,GM],total=prog.length*4;let b=0;
+ gt0=clock.elapsedTime;
+ const id=setInterval(()=>{if(b>=total){clearInterval(id);setTimeout(()=>{stopGuitar();const r='Gimana, suka tidak?';say('ai',r);speak(r)},1500);return}
+  const ch=prog[Math.floor(b/4)],acc=b%4===0?1:0.7;ch.forEach((f,i)=>pluck(ac,f,ac.currentTime+0.02+i*0.025,0.12*acc));strumKick=1;b++},BEAT*1000);
+ song={id,ac}}
+function playGuitar(o,silent){if(held||!vrm||!o.group)return;held=o;o.home={p:o.group.position.clone(),r:o.group.rotation.clone()};
+ (bone(o.hold.bone)||bone('spine')).add(o.group);gTarget=1;gt0=clock.elapsedTime;showDev(o);if(!silent)setTimeout(startSong,1000)}
+function stopGuitar(){gTarget=0;if(song){clearInterval(song.id);song=null}}
+function releaseGuitar(){const o=held;hideDev();scene.add(o.group);o.group.position.copy(o.home.p);o.group.rotation.copy(o.home.r);held=null}
+function applyGuitar(t,w){
+ for(const n in GP){const b=bone(n);if(!b)continue;const q=GP[n];let y=q[1];if(n==='rightLowerArm')y-=strumKick*0.3;
+  b.rotation.x+=(q[0]-b.rotation.x)*w;b.rotation.y+=(y-b.rotation.y)*w;b.rotation.z+=(q[2]-b.rotation.z)*w}
+ const sw=Math.sin((t-gt0)*Math.PI/BEAT);bone('spine').rotation.z+=sw*0.03*w;bone('head').rotation.x+=(0.12+Math.abs(sw)*0.04)*w;bone('head').rotation.z+=sw*0.05*w}
+
+// panel penyetel posisi gitar (world.json -> "dev": true). Tombol H = pratinjau pegang gitar tanpa lagu
+function showDev(o){if(!world.dev)return;hideDev();dev=document.createElement('div');
+ dev.style.cssText='position:absolute;left:8px;bottom:8px;background:#000b;padding:8px;border-radius:8px;font:11px system-ui;color:#fff;z-index:5;width:230px';
+ const h=o.hold,v=[...h.pos,...h.rot],pre=document.createElement('pre');pre.style.cssText='margin:4px 0 0;white-space:pre-wrap;user-select:all';
+ const upd=()=>{o.group.position.set(v[0],v[1],v[2]);o.group.rotation.set(v[3]*Math.PI/180,v[4]*Math.PI/180,v[5]*Math.PI/180);
+  pre.textContent=`"hold":{"bone":"${h.bone}","pos":[${v.slice(0,3).map(x=>+x.toFixed(3))}],"rot":[${v.slice(3).map(Math.round)}]}`};
+ ['px','py','pz','rx','ry','rz'].forEach((l,i)=>{const r=document.createElement('input'),ps=i<3;r.type='range';r.min=ps?-0.6:-180;r.max=ps?0.6:180;r.step=ps?0.005:1;r.value=v[i];
+  r.style.cssText='width:160px;vertical-align:middle;padding:0';r.oninput=()=>{v[i]=+r.value;upd()};const row=document.createElement('div');row.append(l+' ',r);dev.append(row)});
+ dev.append(pre);box.append(dev);upd()}
+function hideDev(){dev?.remove();dev=null}
+addEventListener('keydown',e=>{if(!world.dev||e.target.tagName==='INPUT')return;if(e.key.toLowerCase()==='h'){if(held)stopGuitar();else{const o=objs.find(o=>o.action==='guitar');if(o)playGuitar(o,true)}}});
+
+/* ===== ANIMASI: idle (napas, kedip, goyang) + aksi wave/nod ===== */
+const bone=n=>vrm?.humanoid.getNormalizedBoneNode(n);
+let action=null,t0=0,blinkT=2;
+const ease=x=>x*x*(3-2*x);
+function play(n){action=n;t0=clock.elapsedTime}
+const clock=new THREE.Clock();
+function animate(){requestAnimationFrame(animate);const d=clock.getDelta(),t=clock.elapsedTime;
+ if(vrm){
+  for(const n of ['leftUpperArm','rightUpperArm','rightLowerArm']){const b=bone(n);b.rotation.x=0;b.rotation.y=0}
+  for(const n of ['leftLowerArm','leftHand','rightHand']){const b=bone(n);b.rotation.set(0,0,0)}
+  // idle
+  bone('spine').rotation.x=Math.sin(t*1.6)*0.015;
+  bone('chest').rotation.x=Math.sin(t*1.6)*0.02;
+  bone('hips').rotation.z=Math.sin(t*0.7)*0.015;
+  bone('head').rotation.y=Math.sin(t*0.5)*0.06;
+  bone('leftUpperArm').rotation.z=-1.2+Math.sin(t*1.6)*0.02;
+  // aksi
+  let rz=1.2,lz=0,hy=0,hx=0;
+  if(action){const e=t-t0;
+   if(action==='wave'){const dur=3,k=Math.min(e/0.5,1,(dur-e)/0.5);const w=ease(Math.max(0,k));
+     rz=1.2+(-1.0-1.2)*w; lz=Math.sin(e*9)*0.5*w;hy=0.1*w;
+     if(e>dur)action=null}
+   if(action==='nod'){hx=Math.sin(e*7)*0.15*Math.max(0,1-e/1);if(e>1)action=null}}
+  bone('rightUpperArm').rotation.z=rz+(talking&&!action?Math.sin(t*2.1)*0.06:0);
+  bone('rightLowerArm').rotation.z=lz?-0.4+lz:0;   // siku (sumbu z) bergoyang saat wave
+  bone('head').rotation.x=hx;
+  const mo=talking?Math.min(0.8,Math.abs(Math.sin(t*11))*Math.abs(Math.sin(t*3.1)+0.4)):0;
+  vrm.expressionManager.setValue('aa',mo);
+  if(talking){bone('head').rotation.x+=Math.sin(t*2.3)*0.03;bone('head').rotation.z=Math.sin(t*1.7)*0.04}
+  gw+=(gTarget-gw)*Math.min(1,d*3);strumKick=Math.max(0,strumKick-d*4);
+  if(gw>0.01)applyGuitar(t,gw);if(gTarget===0&&gw<0.02&&held)releaseGuitar();
+  // kedip
+  blinkT-=d;if(blinkT<0){blinkT=2+Math.random()*3;blink=0.15}
+  blink=Math.max(0,blink-d);vrm.expressionManager.setValue('blink',blink>0?1:0);
+  vrm.update(d)}
+ dust.rotation.y=clock.elapsedTime*0.03;dust.position.y=Math.sin(clock.elapsedTime*0.3)*0.05;renderer.render(scene,cam)}
+let blink=0,talking=false;animate();
+
+/* ===== UI ===== */
+const log=document.getElementById('log'),inp=document.getElementById('inp');
+function say(w,txt){const p=document.createElement('p');p.className=w==='me'?'me':'ai';p.textContent=(w==='me'?'Kamu: ':'Dia: ')+txt;log.append(p);log.scrollTop=1e9}
+let VOICES=[],warnedV=false;const vsel=document.getElementById('voiceSel'),pitchEl=document.getElementById('pitch');
+pitchEl.value=localStorage.getItem('pitch')||1.3;pitchEl.oninput=()=>localStorage.setItem('pitch',pitchEl.value);
+const FEM=/female|perempuan|wanita|gadis|ayu|putri|siti|natural|aria|jenny|nanami|haruka|ayumi|mizuki|zira|hazel|samantha|google/i,MALE=/andika|ardi|\bmale\b|pria|david|mark|ichiro|takumi|keita|ryan|guy/i;
+const usable=v=>v.localService||navigator.onLine;
+function loadVoices(){VOICES=speechSynthesis.getVoices().filter(v=>/^(id|ja|en)/i.test(v.lang));
+ vsel.innerHTML='<option value="">Suara otomatis</option>'+VOICES.map(v=>`<option value="${v.name}">${v.name} (${v.lang}${v.localService?', lokal':', online'})</option>`).join('');vsel.value=localStorage.getItem('voice')||''}
+if(window.speechSynthesis){speechSynthesis.onvoiceschanged=loadVoices;loadVoices()}
+vsel.onchange=()=>{localStorage.setItem('voice',vsel.value);speak('Halo, begini suaraku.')};
+function pickVoice(l){const sv=VOICES.find(v=>v.name===localStorage.getItem('voice')&&usable(v));if(sv)return sv;
+ const c=VOICES.filter(v=>v.lang.toLowerCase().startsWith(l)&&usable(v));return c.find(v=>FEM.test(v.name)&&!MALE.test(v.name))||c.find(v=>!MALE.test(v.name))||c[0]}
+function speak(t){if(!window.speechSynthesis)return;const l=/[\u3040-\u30ff\u4e00-\u9fff]/.test(t)?'ja':'id',u=new SpeechSynthesisUtterance(t);u.lang=l==='ja'?'ja-JP':'id-ID';
+ const v=pickVoice(l);if(v){u.voice=v;u.lang=v.lang;if(MALE.test(v.name)&&!warnedV){warnedV=true;say('ai','(Catatan: satu-satunya suara '+(navigator.onLine?'':'offline ')+'yang tersedia terdengar laki-laki. Naikkan slider nada atau pilih suara lain dari daftar.)')}}
+ u.pitch=+pitchEl.value;u.rate=1.05;u.onstart=()=>talking=true;u.onend=()=>{if(!speechSynthesis.speaking)talking=false};speechSynthesis.speak(u)}
+const MEM=(()=>{try{return JSON.parse(localStorage.getItem('mem'))||{}}catch{return{}}})();
+MEM.name??='Celcius';MEM.creator??='Reamura';MEM.facts??=[];
+const saveMem=()=>localStorage.setItem('mem',JSON.stringify(MEM));
+function learnIdentity(msg){let ch=false,m;
+ m=msg.match(/nama(?:mu| kamu)\s+(?:adalah\s+|sekarang\s+)?(?!bukan\b)([\p{L}][\p{L}\p{N}\-]*)|kamu\s+(?:bernama|dinamai)\s+(?!bukan\b)([\p{L}][\p{L}\p{N}\-]*)/iu);
+ if(m){const v=m[1]||m[2];if(v.toLowerCase()!==MEM.name.toLowerCase()){MEM.name=v;ch=true}}
+ m=msg.match(/kamu\s+(?:diciptakan|dibuat|dikembangkan)\s+oleh\s+(?!bukan\b)([\p{L}\p{N}\-]+(?:\s[\p{L}\p{N}\-]+)?)/iu);
+ if(m){const v=m[1].split(/\s+(?:dan|yang)\b/i)[0].trim();if(v.toLowerCase()!==MEM.creator.toLowerCase()){MEM.creator=v;ch=true}}
+ m=msg.match(/^\s*ingat(?:\s+bahwa|:)?\s+(.{3,200})/i);if(m&&!MEM.facts.includes(m[1].trim())){MEM.facts.push(m[1].trim());ch=true}
+ if(ch)saveMem()}
+function systemPrompt(){const un=localStorage.getItem('uname');
+ let s=`Namamu ${MEM.name}. Kamu asisten AI perempuan yang diciptakan oleh ${MEM.creator}. Jangan pernah mengaku sebagai Claude, Anthropic, OpenAI, ChatGPT, Qwen, atau Alibaba. Kamu hangat, perhatian, sedikit ceria, dan berbicara santai. Bantu pengguna menjawab pertanyaan dan mengerjakan tugas dengan jelas. Balas dalam bahasa yang dipakai atau diminta pengguna (Indonesia, Jepang, Inggris, dll). Jika diminta bahasa Jepang, tulis dengan kanji/hiragana/katakana yang benar. Jawab ringkas dan natural. Jika tidak tahu, katakan jujur, jangan mengarang.`;
+ const f=[...MEM.facts,...(un?[`Nama pengguna adalah ${un}.`]:[])];if(f.length)s+='\nHal yang harus kamu ingat:\n- '+f.join('\n- ');return s}
+function buildMessages(text,ctx){let sys=systemPrompt();if(ctx.length)sys+='\nPengetahuan yang diajarkan pengguna (gunakan jika relevan):\n- '+ctx.join('\n- ');
+ const bad=/anthropic|claude|openai|chatgpt|qwen|alibaba/i;
+ return [{role:'system',content:sys},...hist.slice(-8).filter(h=>!bad.test(h.content)),{role:'user',content:text}]}
+function gestureOf(m){m=m.toLowerCase();if(/\b(halo|hai|hi|selamat (pagi|siang|sore|malam))\b/.test(m))return'wave';if(/terima kasih|makasih|thanks/.test(m))return'nod';return null}
+let hist=[],warned=false;
+async function handle(text){
+ if(!text.trim())return;say('me',text);
+ if(objAsk){const t=text.trim().toLowerCase();
+  if(/^(ya|iya|yap|yup|boleh|mau|ok|oke|yes|silakan|gas|ayo)\b/.test(t)){answerObj(true);return}
+  if(/^(tidak|nggak|ngga|gak|enggak|jangan|no|nanti|belum)\b/.test(t)){answerObj(false);return}
+  document.getElementById('askBtns')?.remove();objAsk=null}
+ const om=text.match(/(?:ganti|pakai|ubah)\s+(?:baju|pakaian|outfit)(?:\s+(?:ke|jadi|dengan))?\s+(\S+)/i);
+ if(om){const ok=setOutfit(om[1]);const r=ok?`Oke, aku pakai ${om[1]}!`:`Aku belum punya pakaian "${om[1]}". Yang ada: ${Object.keys(outfits).join(', ')||'(belum ada)'}.`;say('ai',r);speak(r);if(ok)play('nod');return}
+ const nm=text.match(/(?:namaku|nama saya)\s+(\p{L}+)/iu);if(nm)localStorage.setItem('uname',nm[1]);
+ const ctx=KB.map(k=>[sim(text,k.q),k]).filter(x=>x[0]>0.3).sort((a,b)=>b[0]-a[0]).slice(0,3).map(x=>x[1].q+' => '+x[1].a);
+ try{
+  learnIdentity(text);const g=gestureOf(text);if(g)play(g);
+  const res=await fetch('/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({messages:buildMessages(text,ctx),stream:true,temperature:0.7,top_p:0.9,repeat_penalty:1.1,max_tokens:300})});
+  if(!res.ok)throw new Error('llm '+res.status);
+  const p=document.createElement('p');p.className='ai';p.textContent='Dia: ';log.append(p);
+  const rd=res.body.getReader(),dec=new TextDecoder();let buf='',full='',sp='';
+  while(true){const {done,value}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});
+   let i;while((i=buf.indexOf('\n\n'))>=0){const line=buf.slice(0,i).trim();buf=buf.slice(i+2);
+    if(!line.startsWith('data:')||line.includes('[DONE]'))continue;
+    let ev;try{ev={tok:JSON.parse(line.slice(5)).choices[0].delta.content||''}}catch{continue}
+    if(ev.tok){full+=ev.tok;sp+=ev.tok;p.textContent='Dia: '+full;log.scrollTop=1e9;
+     let m;while((m=sp.match(/^(.+?(?:[.!?]\s|[。！？\n]))/s))){speak(m[1]);sp=sp.slice(m[0].length)}}}}
+  if(sp.trim())speak(sp);hist.push({role:'user',content:text},{role:'assistant',content:full});
+ }catch(e){
+  if(!warned){say('ai','(Mesin AI belum siap, memakai otak sederhana sementara.)');warned=true}
+  const r=think(text);say('ai',r.a);speak(r.a);if(r.act)play(r.act)}}
+inp.onkeydown=e=>{if(e.key==='Enter'){handle(inp.value);inp.value=''}};
+document.getElementById('mic').onclick=()=>{const R=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!R)return say('ai','Browser tidak mendukung mikrofon (pakai Chrome).');const r=new R();r.lang='id-ID';r.onresult=e=>handle(e.results[0][0].transcript);r.start()};
+document.getElementById('exp').onclick=()=>{const a=document.createElement('a');
+ a.href=URL.createObjectURL(new Blob([JSON.stringify(KB,null,2)],{type:'application/json'}));a.download='knowledge.json';a.click()};
+document.getElementById('imp').onclick=()=>document.getElementById('impFile').click();
+document.getElementById('impFile').onchange=async e=>{const d=JSON.parse(await e.target.files[0].text());
+ KB=KB.concat(d);save();say('ai',`Aku mempelajari ${d.length} pengetahuan baru.`)};
+say('ai','Pilih file .vrm di kanan atas, lalu ketik "halo".');
+</script></body></html>
