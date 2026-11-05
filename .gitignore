@@ -6,3 +6,4 @@ voice_test_colab.ipynb
 tts/venv
 *.gguf
 export_gguf_colab.ipynb
+*.safetensors
