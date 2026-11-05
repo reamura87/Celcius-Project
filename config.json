@@ -1,6 +1,11 @@
 {
-  "modelFile": "celcius-q4_k_m.gguf",
+  "modelFile": "celcius-q8_0.gguf",
   "modelUrl": "",
   "llamaPort": 8089,
-  "gpuLayers": 99
+  "gpuLayers": 0,
+  "ttsPort": 8090,
+  "ttsCmd": "",
+  "ttsCwd": "",
+  "ctx": 2048,
+  "llamaArgs": []
 }

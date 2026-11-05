@@ -7,10 +7,11 @@ const cfg = require('./config.json');
 
 const WEB = path.join(__dirname, 'web');
 const LLAMA_PORT = cfg.llamaPort || 8089;
+const TTS_PORT = cfg.ttsPort || 8090;
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json',
   '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif',
   '.mp4': 'video/mp4', '.webm': 'video/webm', '.mp3': 'audio/mpeg', '.wav': 'audio/wav' };
-let win, llama = null;
+let win, llama = null, tts = null;
 
 function findExe(dir) {
   if (!fs.existsSync(dir)) return null;
@@ -23,8 +24,8 @@ function findExe(dir) {
 }
 
 // /v1/* diteruskan ke llama-server (satu origin, tanpa masalah CORS)
-function proxy(req, res) {
-  const pr = http.request({ host: '127.0.0.1', port: LLAMA_PORT, path: req.url, method: req.method, headers: req.headers }, (r) => {
+function proxy(req, res, port = LLAMA_PORT, url = req.url) {
+  const pr = http.request({ host: '127.0.0.1', port, path: url, method: req.method, headers: req.headers }, (r) => {
     res.writeHead(r.statusCode, r.headers); r.pipe(res);
   });
   pr.on('error', () => { res.writeHead(503); res.end('mesin AI belum siap'); });
@@ -33,6 +34,8 @@ function proxy(req, res) {
 
 function serve(req, res) {
   if (req.url.startsWith('/v1/')) return proxy(req, res);
+  if (req.url === '/tts/health') return proxy(req, res, TTS_PORT, '/health');
+  if (req.url === '/tts') return proxy(req, res, TTS_PORT, '/tts');
   let rel = decodeURIComponent(req.url.split('?')[0]); if (rel === '/') rel = '/index.html';
   const file = path.normalize(path.join(WEB, rel));
   if (!file.startsWith(WEB) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { console.log('[404 file tidak ada]', req.url); res.writeHead(404); return res.end(); }
@@ -93,11 +96,18 @@ function startLlama(mp) {
     return false;
   }
   console.log('llama-server:', exe, '\nmodel:', mp);
-  llama = spawn(exe, ['-m', mp, '--host', '127.0.0.1', '--port', String(LLAMA_PORT), '-c', '4096', '-ngl', String(cfg.gpuLayers ?? 99)],
+  llama = spawn(exe, ['-m', mp, '--host', '127.0.0.1', '--port', String(LLAMA_PORT), '-c', String(cfg.ctx || 2048), '-np', '1', '-ngl', String(cfg.gpuLayers ?? 0), ...(cfg.llamaArgs || [])],
     { windowsHide: true, cwd: path.dirname(exe) });
   llama.stdout.on('data', (d) => process.stdout.write(d)); llama.stderr.on('data', (d) => process.stderr.write(d));
   llama.on('exit', () => { llama = null; });
   return true;
+}
+
+function startTts() {                                   // opsional: jalankan server suara otomatis jika ttsCmd diisi
+  if (!cfg.ttsCmd) return;
+  tts = spawn(cfg.ttsCmd, [], { shell: true, windowsHide: true, cwd: cfg.ttsCwd || undefined });
+  tts.stdout.on('data', (d) => process.stdout.write('[tts] ' + d)); tts.stderr.on('data', (d) => process.stderr.write('[tts] ' + d));
+  tts.on('exit', () => { tts = null; });
 }
 
 async function waitReady(ms = 180000) {
@@ -126,6 +136,7 @@ app.whenReady().then(async () => {
   const srv = http.createServer(serve);
   await new Promise((r) => srv.listen(0, '127.0.0.1', r));
   const mp = await ensureModel();
+  startTts();
   if (startLlama(mp)) await waitReady();
   win.loadURL(`http://127.0.0.1:${srv.address().port}/`);
   if (app.isPackaged) {
@@ -136,5 +147,5 @@ app.whenReady().then(async () => {
     autoUpdater.checkForUpdatesAndNotify().catch(() => {});
   }
 });
-app.on('before-quit', () => { if (llama) llama.kill(); });
+app.on('before-quit', () => { if (llama) llama.kill(); if (tts) { try { spawn('taskkill', ['/pid', String(tts.pid), '/T', '/F']); } catch (e) {} } });
 app.on('window-all-closed', () => app.quit());

@@ -1,7 +1,8 @@
-node_modules/
-dist/
-web/libs/
-llama/
-tmp/
-
-Add-Content .gitignore "`nadapter/`nadapter.zip`n*.gguf`nmemory.json`nknowledge.json`nout/"
+venv
+node_modules
+llama
+adapter.zip
+voice_test_colab.ipynb
+tts/venv
+*.gguf
+export_gguf_colab.ipynb
