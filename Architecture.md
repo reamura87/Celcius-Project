@@ -253,3 +253,23 @@ Perangkat Vulkan yang terdeteksi: Intel UHD 770 (iGPU, indeks 0) dan RTX 3050 6 
 Dua profil penempatan (keputusan menunggu angka VRAM VoxCPM2 dari `bench.py` GPU):
 - **A. LLM penuh di GPU:** TTFT dan kecepatan terbaik (40,7 t/s), tetapi menyisakan ±2,5 GB, kemungkinan tidak cukup untuk VoxCPM2.
 - **B. LLM di CPU, TTS di GPU:** 12,7 t/s, tiga kali laju bicara; TTFT ±0,5 s dengan cache awalan. Menyisakan hampir seluruh VRAM untuk TTS.
+
+### 8.2 Hasil `bench.py` pada GPU (6 Nov 2026, PyTorch 2.10.0+cu130, RTX 3050 6 GB, bf16)
+
+| Ukuran | Hasil |
+|---|---|
+| Waktu muat model | 39,5 s |
+| VRAM setelah dimuat | 5,12 GB (puncak sintesis 5,57 GB dari 6,0 GB) |
+| RTF, 6 langkah difusi | id 5,96 · ja 2,13 · en 6,05 |
+| RTF, 10 langkah difusi | id 6,91 · ja 2,77 · en 6,68 |
+| Peringatan | `torch.compile disabled - triton is not installed` |
+
+Tafsir:
+1. VoxCPM2 **muat** di 6 GB, tetapi dengan sisa hanya ±0,4 GB; renderer Electron dan Windows bisa mendorongnya melewati batas (spill ke memori bersama = melambat tajam).
+2. **Belum real-time:** RTF 2,1–6,9 berarti kalimat beraudio 4 detik butuh 9–28 detik untuk dirender. Mengurangi langkah difusi (10 -> 6) hanya mempercepat sekitar 15%, jadi biaya terbesar bukan di langkah difusi.
+3. **Variasi tinggi antarpengujian:** iterasi Jepang berjalan ±3–4 it/s, Indonesia dan Inggris ±1 it/s untuk kode yang sama. Itu bukan sifat bahasa; dugaan kuat: tekanan VRAM, pembatasan daya/clock laptop, atau proses lain yang memakai GPU. Perlu log `nvidia-smi` saat benchmark.
+4. LLM penuh di GPU (3,4 GB) dan VoxCPM2 (5,1 GB) **tidak bisa berbagi** GPU 6 GB. Salah satunya harus di CPU.
+5. Percobaan optimasi yang belum dicoba: (a) `triton-windows` agar `torch.compile` aktif (PyTorch 2.10 -> `pip install "triton-windows>=3.6,<3.7"`), (b) daya AC + mode kinerja tinggi + tutup aplikasi lain yang memakai GPU, (c) pengurangan tekanan VRAM.
+
+Keputusan sementara (sesuai urutan prioritas): kualitas dan kecepatan teks didahulukan. Default sementara: **LLM penuh di GPU** (`gpuLayers` 99), server suara tidak dijalankan.
+Jalur menuju suara real-time bila percobaan (a)-(c) tidak cukup: *voice factory* (VoxCPM2 membuat korpus, model TTS kecil dilatih dari suara itu), konverter warna suara di atas TTS dasar yang cepat, dan cache frasa yang sering dipakai. Ketiganya perlu dibandingkan dengan data sebelum dipilih.
