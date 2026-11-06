@@ -7,3 +7,5 @@ tts/venv
 *.gguf
 export_gguf_colab.ipynb
 *.safetensors
+*.txt
+*.csv

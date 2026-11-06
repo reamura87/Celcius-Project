@@ -291,4 +291,8 @@ document.getElementById('imp').onclick=()=>document.getElementById('impFile').cl
 document.getElementById('impFile').onchange=async e=>{const d=JSON.parse(await e.target.files[0].text());
  KB=KB.concat(d);save();say('ai',`Aku mempelajari ${d.length} pengetahuan baru.`)};
 say('ai','Pilih file .vrm di kanan atas, lalu ketik "halo".');
+
+/* Pemanasan cache prompt: awalan system prompt dihitung sekali saat aplikasi dibuka, sehingga pesan pertama tidak menunggu ±4,6 s */
+setTimeout(()=>{fetch('/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json'},
+ body:JSON.stringify({messages:buildMessages('Halo',[]),max_tokens:1,stream:false,temperature:0})}).catch(()=>{})},800);
 </script></body></html>
