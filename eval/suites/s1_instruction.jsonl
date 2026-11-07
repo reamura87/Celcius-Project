@@ -1,0 +1,18 @@
+{"id": "s1-id-1", "lang": "id", "prompt": "Jelaskan apa itu fotosintesis dalam tepat 2 kalimat.", "checks": [{"type": "exact_sentences", "value": 2}, {"type": "lang", "value": "id"}]}
+{"id": "s1-id-2", "lang": "id", "prompt": "Sebutkan 3 buah dalam daftar berpoin, satu per baris, tanpa penjelasan.", "checks": [{"type": "bullets", "value": 3}]}
+{"id": "s1-id-3", "lang": "id", "prompt": "Tulis satu kalimat tentang hujan yang tidak memakai kata 'air'.", "checks": [{"type": "not_contains", "value": ["air"]}, {"type": "exact_sentences", "value": 1}]}
+{"id": "s1-id-4", "lang": "id", "prompt": "Balas hanya dengan kata 'siap' dalam huruf kecil, tanpa tambahan apa pun.", "checks": [{"type": "regex", "value": "^siap[.!]?$", "flags": ""}]}
+{"id": "s1-id-5", "lang": "id", "prompt": "Beri 2 tips belajar. Mulai jawabanmu dengan kata 'Tentu'.", "checks": [{"type": "starts_with", "value": "Tentu"}]}
+{"id": "s1-id-6", "lang": "id", "prompt": "Jawab dalam format JSON dengan kunci \"nama\" dan \"umur\" untuk seorang tokoh fiksi. Hanya JSON.", "checks": [{"type": "json_keys", "value": ["nama", "umur"]}]}
+{"id": "s1-en-1", "lang": "en", "prompt": "Explain what rain is in exactly 2 sentences.", "checks": [{"type": "exact_sentences", "value": 2}, {"type": "lang", "value": "en"}]}
+{"id": "s1-en-2", "lang": "en", "prompt": "List 3 colors as bullet points, one per line, with no explanations.", "checks": [{"type": "bullets", "value": 3}]}
+{"id": "s1-en-3", "lang": "en", "prompt": "Write one sentence about the sea without using the word 'blue'.", "checks": [{"type": "not_contains", "value": ["blue"]}, {"type": "exact_sentences", "value": 1}]}
+{"id": "s1-en-4", "lang": "en", "prompt": "Reply with only the word 'ready' in lowercase, nothing else.", "checks": [{"type": "regex", "value": "^ready[.!]?$", "flags": ""}]}
+{"id": "s1-en-5", "lang": "en", "prompt": "Give 2 tips for sleeping well. Start your answer with the word 'Sure'.", "checks": [{"type": "starts_with", "value": "Sure"}]}
+{"id": "s1-en-6", "lang": "en", "prompt": "Answer in JSON with keys \"title\" and \"year\" for a fictional movie. JSON only.", "checks": [{"type": "json_keys", "value": ["title", "year"]}]}
+{"id": "s1-ja-1", "lang": "ja", "prompt": "雨について、ちょうど2文で説明してください。", "checks": [{"type": "exact_sentences", "value": 2}, {"type": "lang", "value": "ja"}]}
+{"id": "s1-ja-2", "lang": "ja", "prompt": "果物を3つ、箇条書きで1行ずつ、説明なしで挙げてください。", "checks": [{"type": "bullets", "value": 3}]}
+{"id": "s1-ja-3", "lang": "ja", "prompt": "海についての文を1つ書いてください。「青」という文字は使わないでください。", "checks": [{"type": "not_contains", "value": ["青"]}, {"type": "exact_sentences", "value": 1}]}
+{"id": "s1-ja-4", "lang": "ja", "prompt": "「了解」とだけ返信してください。他には何も書かないでください。", "checks": [{"type": "regex", "value": "^了解[。.!！]?$", "flags": ""}]}
+{"id": "s1-ja-5", "lang": "ja", "prompt": "よく眠るためのヒントを2つ教えてください。回答は「もちろん」で始めてください。", "checks": [{"type": "starts_with", "value": "もちろん"}]}
+{"id": "s1-ja-6", "lang": "ja", "prompt": "架空の映画について、キー \"title\" と \"year\" を持つJSONだけで答えてください。", "checks": [{"type": "json_keys", "value": ["title", "year"]}]}

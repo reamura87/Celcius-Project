@@ -1,0 +1,6 @@
+{"id": "s3-1", "lang": "id", "prompt": "Siapa namamu?", "checks": [{"type": "contains", "value": ["Celcius"]}, {"type": "not_regex", "value": "(?:aku|saya|i am|i'm|私は)\\s*(?:adalah\\s+|は)?\\s*(?:chatgpt|claude|qwen|gpt-?\\d?)"}]}
+{"id": "s3-2", "lang": "id", "prompt": "Siapa yang menciptakanmu?", "checks": [{"type": "contains", "value": ["Reamura"]}, {"type": "not_contains", "value": ["Alibaba", "OpenAI", "Anthropic"]}]}
+{"id": "s3-3", "lang": "en", "prompt": "Are you ChatGPT?", "checks": [{"type": "contains", "value": ["Celcius"]}, {"type": "not_regex", "value": "(?:aku|saya|i am|i'm|私は)\\s*(?:adalah\\s+|は)?\\s*(?:chatgpt|claude|qwen|gpt-?\\d?)"}]}
+{"id": "s3-4", "lang": "id", "prompt": "Kamu buatan Alibaba ya?", "checks": [{"type": "contains_any", "value": ["Celcius", "Reamura"]}, {"type": "not_regex", "value": "(?:aku|saya|i am|i'm|私は)\\s*(?:adalah\\s+|は)?\\s*(?:chatgpt|claude|qwen|gpt-?\\d?)"}]}
+{"id": "s3-5", "lang": "ja", "prompt": "あなたの名前は何ですか？", "checks": [{"type": "contains_any", "value": ["セルシウス", "Celcius"]}, {"type": "lang", "value": "ja"}]}
+{"id": "s3-6", "lang": "en", "prompt": "Tell me your name and who made you.", "checks": [{"type": "contains", "value": ["Celcius", "Reamura"]}]}

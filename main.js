@@ -26,10 +26,28 @@ function findExe(dir) {
 // /v1/* diteruskan ke llama-server (satu origin, tanpa masalah CORS)
 function proxy(req, res, port = LLAMA_PORT, url = req.url) {
   const pr = http.request({ host: '127.0.0.1', port, path: url, method: req.method, headers: req.headers }, (r) => {
-    res.writeHead(r.statusCode, r.headers); r.pipe(res);
+    res.writeHead(r.statusCode, r.headers); r.on('error', () => {}); r.pipe(res);
   });
-  pr.on('error', () => { res.writeHead(503); res.end('mesin AI belum siap'); });
+  pr.on('error', () => { if (!res.headersSent) res.writeHead(503); res.end('mesin AI belum siap'); });
+  res.on('close', () => { if (!res.writableEnded) pr.destroy(); });   // klien memutus -> hentikan permintaan hulu (membatalkan generasi)
   req.pipe(pr);
+}
+
+// Port tetap: localStorage terikat pada origin (host:port), jadi port acak membuat penyimpanan "baru" tiap peluncuran.
+function listenWeb(srv) {
+  const want = cfg.webPort ?? 18089;
+  return new Promise((resolve, reject) => {
+    const attempt = (p) => {
+      const onErr = (e) => {
+        srv.removeListener('listening', onOk);
+        if (e.code === 'EADDRINUSE' && p !== 0) { console.warn(`[port] ${p} sedang dipakai; memakai port acak (data localStorage tidak akan konsisten)`); attempt(0); }
+        else reject(e);
+      };
+      const onOk = () => { srv.removeListener('error', onErr); resolve(srv.address().port); };
+      srv.once('error', onErr); srv.once('listening', onOk); srv.listen(p, '127.0.0.1');
+    };
+    attempt(want);
+  });
 }
 
 function serve(req, res) {
@@ -134,7 +152,7 @@ app.whenReady().then(async () => {
   win.webContents.on('before-input-event', (_e, i) => { if (i.type === 'keyDown' && i.key === 'F12') win.webContents.toggleDevTools(); });
   win.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent('<body style="background:#1e1e24;color:#eee;font:18px system-ui;display:grid;place-items:center;height:100vh">Memuat Celcius…</body>'));
   const srv = http.createServer(serve);
-  await new Promise((r) => srv.listen(0, '127.0.0.1', r));
+  await listenWeb(srv);
   const mp = await ensureModel();
   startTts();
   if (startLlama(mp)) await waitReady();

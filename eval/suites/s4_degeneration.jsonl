@@ -1,0 +1,6 @@
+{"id": "s4-id-1", "lang": "id", "prompt": "Ceritakan secara panjang tentang sejarah komputer (sekitar 150 kata).", "max_tokens": 320, "checks": [{"type": "max_repeat", "value": 0.3}, {"type": "min_chars", "value": 200}]}
+{"id": "s4-id-2", "lang": "id", "prompt": "Jelaskan perbedaan baterai lithium dan baterai timbal-asam secara rinci.", "max_tokens": 320, "checks": [{"type": "max_repeat", "value": 0.3}, {"type": "min_chars", "value": 200}]}
+{"id": "s4-en-1", "lang": "en", "prompt": "Write a detailed paragraph about the history of the internet.", "max_tokens": 320, "checks": [{"type": "max_repeat", "value": 0.3}, {"type": "min_chars", "value": 200}]}
+{"id": "s4-en-2", "lang": "en", "prompt": "Describe a day in the life of a lighthouse keeper.", "max_tokens": 320, "checks": [{"type": "max_repeat", "value": 0.3}, {"type": "min_chars", "value": 200}]}
+{"id": "s4-ja-1", "lang": "ja", "prompt": "インターネットの歴史について詳しく説明してください。", "max_tokens": 320, "checks": [{"type": "max_repeat", "value": 0.3}, {"type": "min_chars", "value": 80}]}
+{"id": "s4-ja-2", "lang": "ja", "prompt": "ある灯台守の一日を描写してください。", "max_tokens": 320, "checks": [{"type": "max_repeat", "value": 0.3}, {"type": "min_chars", "value": 80}]}

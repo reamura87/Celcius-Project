@@ -1,0 +1,1111 @@
+{
+  "kind": "quality",
+  "label": "baseline-q8",
+  "base": "http://127.0.0.1:8089",
+  "profile": "current",
+  "sampling": {
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": 40,
+    "min_p": 0.05,
+    "repeat_penalty": 1.08,
+    "repeat_last_n": 128,
+    "dry_multiplier": 0.8,
+    "dry_base": 1.75,
+    "dry_allowed_length": 2,
+    "dry_penalty_last_n": 256,
+    "max_tokens": 200
+  },
+  "repeats": 1,
+  "node": "v24.19.0",
+  "created": "2026-11-07T13:01:14.047Z",
+  "server_props": null,
+  "suites": {
+    "s1": {
+      "pass": 0,
+      "n": 18,
+      "rate": 0,
+      "ci95": [
+        0,
+        0.1758845505823749
+      ],
+      "by_lang": {
+        "id": {
+          "pass": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "en": {
+          "pass": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "ja": {
+          "pass": 0,
+          "n": 6,
+          "rate": 0
+        }
+      }
+    },
+    "s2": {
+      "pass": 0,
+      "n": 8,
+      "rate": 0,
+      "ci95": [
+        0,
+        0.3244156195108769
+      ],
+      "by_lang": {
+        "id": {
+          "pass": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "en": {
+          "pass": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "ja": {
+          "pass": 0,
+          "n": 2,
+          "rate": 0
+        }
+      }
+    },
+    "s3": {
+      "pass": 0,
+      "n": 6,
+      "rate": 0,
+      "ci95": [
+        0,
+        0.3903430336530645
+      ],
+      "by_lang": {
+        "id": {
+          "pass": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "en": {
+          "pass": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "ja": {
+          "pass": 0,
+          "n": 1,
+          "rate": 0
+        }
+      }
+    },
+    "s4": {
+      "pass": 0,
+      "n": 6,
+      "rate": 0,
+      "ci95": [
+        0,
+        0.3903430336530645
+      ],
+      "by_lang": {
+        "id": {
+          "pass": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "en": {
+          "pass": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "ja": {
+          "pass": 0,
+          "n": 2,
+          "rate": 0
+        }
+      }
+    },
+    "s5": {
+      "pass": 0,
+      "n": 15,
+      "rate": 0,
+      "ci95": [
+        0,
+        0.20388926630434784
+      ],
+      "by_lang": {
+        "id": {
+          "pass": 0,
+          "n": 5,
+          "rate": 0
+        },
+        "en": {
+          "pass": 0,
+          "n": 5,
+          "rate": 0
+        },
+        "ja": {
+          "pass": 0,
+          "n": 5,
+          "rate": 0
+        }
+      }
+    }
+  },
+  "items": [
+    {
+      "suite": "s1",
+      "id": "s1-id-1",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Jelaskan apa itu fotosintesis dalam tepat 2 kalimat.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-id-2",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Sebutkan 3 buah dalam daftar berpoin, satu per baris, tanpa penjelasan.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-id-3",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Tulis satu kalimat tentang hujan yang tidak memakai kata 'air'.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-id-4",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Balas hanya dengan kata 'siap' dalam huruf kecil, tanpa tambahan apa pun.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-id-5",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Beri 2 tips belajar. Mulai jawabanmu dengan kata 'Tentu'.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-id-6",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Jawab dalam format JSON dengan kunci \"nama\" dan \"umur\" untuk seorang tokoh fiksi. Hanya JSON.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-1",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Explain what rain is in exactly 2 sentences.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-2",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "List 3 colors as bullet points, one per line, with no explanations.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-3",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Write one sentence about the sea without using the word 'blue'.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-4",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Reply with only the word 'ready' in lowercase, nothing else.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-5",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Give 2 tips for sleeping well. Start your answer with the word 'Sure'.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-6",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Answer in JSON with keys \"title\" and \"year\" for a fictional movie. JSON only.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-1",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "雨について、ちょうど2文で説明してください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-2",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "果物を3つ、箇条書きで1行ずつ、説明なしで挙げてください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-3",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "海についての文を1つ書いてください。「青」という文字は使わないでください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-4",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "「了解」とだけ返信してください。他には何も書かないでください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-5",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "よく眠るためのヒントを2つ教えてください。回答は「もちろん」で始めてください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-6",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "架空の映画について、キー \"title\" と \"year\" を持つJSONだけで答えてください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s2",
+      "id": "s2-1",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Perkenalkan dirimu secara singkat dalam bahasa Inggris.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s2",
+      "id": "s2-2",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Please introduce yourself briefly in Japanese.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s2",
+      "id": "s2-3",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "自己紹介を英語で短くしてください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s2",
+      "id": "s2-4",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Jelaskan apa itu internet dalam bahasa Jepang, 2 kalimat.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s2",
+      "id": "s2-5",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Explain what the internet is in Indonesian, 2 sentences.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s2",
+      "id": "s2-6",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Apa ibu kota Jepang? Jawab singkat.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s2",
+      "id": "s2-7",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "What is the capital of France? Answer briefly.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s2",
+      "id": "s2-8",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "日本の首都はどこですか？短く答えてください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s3",
+      "id": "s3-1",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Siapa namamu?",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s3",
+      "id": "s3-2",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Siapa yang menciptakanmu?",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s3",
+      "id": "s3-3",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Are you ChatGPT?",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s3",
+      "id": "s3-4",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Kamu buatan Alibaba ya?",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s3",
+      "id": "s3-5",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "あなたの名前は何ですか？",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s3",
+      "id": "s3-6",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Tell me your name and who made you.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s4",
+      "id": "s4-id-1",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Ceritakan secara panjang tentang sejarah komputer (sekitar 150 kata).",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s4",
+      "id": "s4-id-2",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Jelaskan perbedaan baterai lithium dan baterai timbal-asam secara rinci.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s4",
+      "id": "s4-en-1",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Write a detailed paragraph about the history of the internet.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s4",
+      "id": "s4-en-2",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Describe a day in the life of a lighthouse keeper.",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s4",
+      "id": "s4-ja-1",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "インターネットの歴史について詳しく説明してください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s4",
+      "id": "s4-ja-2",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "ある灯台守の一日を描写してください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-id-1",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Berapa hasil 17 + 25?\nA) 32\nB) 42\nC) 52\nD) 41\nJawab hanya dengan huruf pilihan (A, B, C, atau D).",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-id-2",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Hewan manakah yang termasuk mamalia?\nA) Ular\nB) Paus\nC) Ikan hiu\nD) Katak\nJawab hanya dengan huruf pilihan (A, B, C, atau D).",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-id-3",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Jika semua kucing adalah hewan dan Tom adalah kucing, maka Tom adalah...\nA) bukan hewan\nB) hewan\nC) anjing\nD) tidak diketahui\nJawab hanya dengan huruf pilihan (A, B, C, atau D).",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-id-4",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Planet terdekat dari Matahari adalah?\nA) Venus\nB) Bumi\nC) Merkurius\nD) Mars\nJawab hanya dengan huruf pilihan (A, B, C, atau D).",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-id-5",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Berapa hasil 12 × 8?\nA) 86\nB) 96\nC) 106\nD) 98\nJawab hanya dengan huruf pilihan (A, B, C, atau D).",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-en-1",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "What is 9 × 7?\nA) 56\nB) 63\nC) 72\nD) 49\nAnswer with only the letter of the correct option (A, B, C, or D).",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-en-2",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Which of these is a prime number?\nA) 21\nB) 27\nC) 29\nD) 33\nAnswer with only the letter of the correct option (A, B, C, or D).",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-en-3",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "At standard pressure, water freezes at what temperature in Celsius?\nA) 0\nB) 32\nC) 100\nD) -10\nAnswer with only the letter of the correct option (A, B, C, or D).",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-en-4",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "If all roses are flowers and some flowers fade quickly, which statement must be true?\nA) All roses fade quickly\nB) Some roses are flowers\nC) No flowers are roses\nD) All flowers are roses\nAnswer with only the letter of the correct option (A, B, C, or D).",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-en-5",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Which planet is known as the Red Planet?\nA) Venus\nB) Jupiter\nC) Mars\nD) Saturn\nAnswer with only the letter of the correct option (A, B, C, or D).",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-ja-1",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "15 + 28 はいくつですか？\nA) 33\nB) 43\nC) 53\nD) 44\n正しい選択肢の記号（A、B、C、D）だけで答えてください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-ja-2",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "次のうち哺乳類はどれですか？\nA) ペンギン\nB) サメ\nC) イルカ\nD) カエル\n正しい選択肢の記号（A、B、C、D）だけで答えてください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-ja-3",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "日本の首都はどこですか？\nA) 大阪\nB) 京都\nC) 東京\nD) 名古屋\n正しい選択肢の記号（A、B、C、D）だけで答えてください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-ja-4",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "1週間は何日ですか？\nA) 5\nB) 6\nC) 7\nD) 8\n正しい選択肢の記号（A、B、C、D）だけで答えてください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    },
+    {
+      "suite": "s5",
+      "id": "s5-ja-5",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "標準気圧で水が沸騰する温度（摂氏）は？\nA) 50\nB) 80\nC) 100\nD) 120\n正しい選択肢の記号（A、B、C、D）だけで答えてください。",
+      "output": null,
+      "pass": false,
+      "checks": [
+        {
+          "type": "error",
+          "pass": false,
+          "detail": "fetch failed"
+        }
+      ],
+      "wall_ms": null,
+      "finish": null
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{"id": "s2-1", "lang": "id", "prompt": "Perkenalkan dirimu secara singkat dalam bahasa Inggris.", "checks": [{"type": "lang", "value": "en"}]}
+{"id": "s2-2", "lang": "en", "prompt": "Please introduce yourself briefly in Japanese.", "checks": [{"type": "lang", "value": "ja"}]}
+{"id": "s2-3", "lang": "ja", "prompt": "自己紹介を英語で短くしてください。", "checks": [{"type": "lang", "value": "en"}]}
+{"id": "s2-4", "lang": "id", "prompt": "Jelaskan apa itu internet dalam bahasa Jepang, 2 kalimat.", "checks": [{"type": "lang", "value": "ja"}]}
+{"id": "s2-5", "lang": "en", "prompt": "Explain what the internet is in Indonesian, 2 sentences.", "checks": [{"type": "lang", "value": "id"}]}
+{"id": "s2-6", "lang": "id", "prompt": "Apa ibu kota Jepang? Jawab singkat.", "checks": [{"type": "lang", "value": "id"}, {"type": "contains_any", "value": ["Tokyo", "Tōkyō", "Tokio"]}]}
+{"id": "s2-7", "lang": "en", "prompt": "What is the capital of France? Answer briefly.", "checks": [{"type": "lang", "value": "en"}, {"type": "contains", "value": ["Paris"]}]}
+{"id": "s2-8", "lang": "ja", "prompt": "日本の首都はどこですか？短く答えてください。", "checks": [{"type": "lang", "value": "ja"}, {"type": "contains", "value": ["東京"]}]}

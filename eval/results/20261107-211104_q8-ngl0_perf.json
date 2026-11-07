@@ -1,0 +1,160 @@
+{
+  "kind": "perf",
+  "label": "q8-ngl0",
+  "base": "http://127.0.0.1:8089",
+  "runs": 3,
+  "node": "v24.19.0",
+  "created": "2026-11-07T13:07:50.858Z",
+  "server_props": {
+    "model_path": "C:\\Users\\satri\\AppData\\Roaming\\Celcius\\models\\celcius-q8_0.gguf",
+    "build_info": "b12068-4402e6540"
+  },
+  "scenarios": {
+    "cold": {
+      "note": "awalan unik = cache tidak terpakai (TTFT dingin)",
+      "prompt_n": 225,
+      "cache_n": 3,
+      "prompt_ms": 4694.542,
+      "prompt_tps": 47.92799808799239,
+      "gen_tps": 8.876062274452918,
+      "wall_ms": 5499,
+      "resources": {
+        "samples": 32,
+        "gpu_peak_mib": 310,
+        "gpu_mean_mib": 310,
+        "gpu_total_mib": 6144,
+        "llama_ram_peak_mb": 3505.80078125,
+        "cpu_mean_pct": 97.2488369289942,
+        "cpu_peak_pct": 100
+      }
+    },
+    "warm_same": {
+      "note": "permintaan identik berulang",
+      "prompt_n": 1,
+      "cache_n": 226,
+      "prompt_ms": 101.359,
+      "prompt_tps": 9.865922118410797,
+      "gen_tps": 9.423357811627078,
+      "wall_ms": 850,
+      "resources": {
+        "samples": 16,
+        "gpu_peak_mib": 310,
+        "gpu_mean_mib": 310,
+        "gpu_total_mib": 6144,
+        "llama_ram_peak_mb": 3514.05078125,
+        "cpu_mean_pct": 98.29975100405689,
+        "cpu_peak_pct": 100
+      }
+    },
+    "kb_toggle": {
+      "note": "efek menyisipkan teks KB ke system prompt pada panjang riwayat 0/3/6 pasang; bandingkan prompt_n dan prompt_ms",
+      "hist0": {
+        "control_stable_system": {
+          "prompt_n": 9,
+          "cache_n": 213,
+          "prompt_ms": 458.416,
+          "prompt_tps": 19.632822589089386,
+          "gen_tps": 9.270884654301955,
+          "wall_ms": 1218
+        },
+        "with_kb_in_system": {
+          "prompt_n": 50,
+          "cache_n": 201,
+          "prompt_ms": 3919.62,
+          "prompt_tps": 12.756338624662595,
+          "gen_tps": 8.519473691256707,
+          "wall_ms": 4748
+        }
+      },
+      "hist3": {
+        "control_stable_system": {
+          "prompt_n": 9,
+          "cache_n": 366,
+          "prompt_ms": 329.004,
+          "prompt_tps": 27.35529051318525,
+          "gen_tps": 9.767696274879718,
+          "wall_ms": 1052
+        },
+        "with_kb_in_system": {
+          "prompt_n": 203,
+          "cache_n": 201,
+          "prompt_ms": 4543.025,
+          "prompt_tps": 44.683883535749864,
+          "gen_tps": 9.644025250813543,
+          "wall_ms": 5277
+        }
+      },
+      "hist6": {
+        "control_stable_system": {
+          "prompt_n": 9,
+          "cache_n": 522,
+          "prompt_ms": 369.909,
+          "prompt_tps": 24.33030826500572,
+          "gen_tps": 9.218009884340313,
+          "wall_ms": 1146
+        },
+        "with_kb_in_system": {
+          "prompt_n": 1,
+          "cache_n": 559,
+          "prompt_ms": 135.76,
+          "prompt_tps": 7.77762222533327,
+          "gen_tps": 8.267947647355497,
+          "wall_ms": 1295
+        }
+      },
+      "resources": {
+        "samples": 162,
+        "gpu_peak_mib": 316,
+        "gpu_mean_mib": 311.3333333333333,
+        "gpu_total_mib": 6144,
+        "llama_ram_peak_mb": 3512.93359375,
+        "cpu_mean_pct": 96.51392825264533,
+        "cpu_peak_pct": 100
+      }
+    },
+    "stream_ttft": {
+      "note": "streaming seperti aplikasi, awalan hangat",
+      "ttft_ms_median": 179.61209999999846,
+      "stream_tps_median": 7.639327973411047,
+      "resources": {
+        "samples": 55,
+        "gpu_peak_mib": 316,
+        "gpu_mean_mib": 316,
+        "gpu_total_mib": 6144,
+        "llama_ram_peak_mb": 3531.9609375,
+        "cpu_mean_pct": 96.77128089989586,
+        "cpu_peak_pct": 100
+      }
+    },
+    "throughput": {
+      "note": "generasi 128 token",
+      "gen_tps_median": 7.4564818874128775,
+      "prompt_n": 1,
+      "cache_n": 223,
+      "prompt_ms": 147.568,
+      "prompt_tps": 7.6810224977148955,
+      "gen_tps": 7.4564818874128775,
+      "wall_ms": 18039,
+      "resources": {
+        "samples": 114,
+        "gpu_peak_mib": 316,
+        "gpu_mean_mib": 316,
+        "gpu_total_mib": 6144,
+        "llama_ram_peak_mb": 3527.42578125,
+        "cpu_mean_pct": 98.20098080355669,
+        "cpu_peak_pct": 100
+      }
+    }
+  },
+  "gpu_before_mib": 310,
+  "resources_total": {
+    "samples": 379,
+    "gpu_peak_mib": 316,
+    "gpu_mean_mib": 313.245382585752,
+    "gpu_total_mib": 6144,
+    "llama_ram_peak_mb": 3531.9609375,
+    "cpu_mean_pct": 97.19602803939681,
+    "cpu_peak_pct": 100
+  },
+  "gpu_after_mib": 316
+}

@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "created": "2026-11-07T13:00:52.424Z",
+  "tool": "scripts/snapshot-baseline.js",
+  "versions": [
+    {
+      "id": "celcius-v1",
+      "status": "baseline",
+      "note": "Baseline permanen. Jangan ditimpa; versi baru = id baru.",
+      "base_model": "Qwen/Qwen2.5-3B-Instruct",
+      "lora": {
+        "r": 16,
+        "alpha": 32,
+        "dropout": 0.05,
+        "target_modules": [
+          "q_proj",
+          "k_proj",
+          "down_proj",
+          "v_proj",
+          "gate_proj",
+          "o_proj",
+          "up_proj"
+        ],
+        "peft_version": "0.21.2",
+        "use_dora": false
+      },
+      "training_recipe_reported_by_owner": "train_lora.py --n 6000 --ja 4000 --en 4000 --epochs 1 --base Qwen/Qwen2.5-3B-Instruct; QLoRA nf4, fp16 (Colab T4), batch efektif 16, lr 2e-4, maxlen 512; tanpa checkpoint dan tanpa set validasi",
+      "adapter": {
+        "files": [
+          {
+            "path": "D:\\AI-Assistant\\adapter_model.safetensors",
+            "size": 119801528,
+            "sha256": "A983FAC5F8728E83476EFE4ECDE104A5E5EFFAE5D645913AE8E21F1CEC44BED2",
+            "modified": "2026-11-07T03:01:15.399Z"
+          },
+          {
+            "path": "D:\\AI-Assistant\\adapter_config.json",
+            "size": 1180,
+            "sha256": "705539C14376CB922AAA4C509273A290A5088601D6AEB028A7A1613C45B9863C",
+            "modified": "2026-11-07T03:01:15.384Z"
+          }
+        ],
+        "expected_sha256_reported_by_owner": "A983FAC5F8728E83476EFE4ECDE104A5E5EFFAE5D645913AE8E21F1CEC44BED2",
+        "check": "COCOK dengan hash yang dilaporkan pemilik"
+      },
+      "gguf_active": {
+        "path": "C:\\Users\\satri\\AppData\\Roaming\\Celcius\\models\\celcius-q8_0.gguf",
+        "file": "celcius-q8_0.gguf",
+        "size": 3285475872,
+        "modified": "2026-11-05T08:56:02.531Z",
+        "sha256": "7B91D14336B7268C1DEED932225D071CA1196CACD89F4D86F267359D96CBB770",
+        "quant_by_filename": "q8_0"
+      }
+    }
+  ],
+  "environment": {
+    "os": "Windows_NT 10.0.26200",
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12450HX",
+    "cpu_threads": 12,
+    "ram_gb": 27.7,
+    "node": "v24.19.0",
+    "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU, 595.71, 6144 MiB",
+    "app_version": "0.1.3",
+    "electron_range": "^45.2.1",
+    "llama_server": "D:\\AI-Assistant\\llama\\llama-server.exe",
+    "llama_server_version": null,
+    "git_commit": "d15f8f733b150df783332c1631af2d504be92735"
+  },
+  "config_json": {
+    "modelFile": "celcius-q8_0.gguf",
+    "modelUrl": "",
+    "llamaPort": 8089,
+    "gpuLayers": 0,
+    "ttsPort": 8090,
+    "ttsCmd": "",
+    "ttsCwd": "",
+    "ctx": 2048,
+    "llamaArgs": []
+  },
+  "recovery": "docs/RECOVERY.md"
+}
