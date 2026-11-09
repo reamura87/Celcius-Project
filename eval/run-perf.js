@@ -34,18 +34,19 @@ async function main() {
   await scen('cold', async () => { const rows = []; for (let i = 0; i < RUNS; i++) rows.push(await once(msgs(`[${crypto.randomBytes(4).toString('hex')}] ` + SYS, 0, 'Halo, apa kabar?'))); return { note: 'awalan unik = cache tidak terpakai (TTFT dingin)', ...summary(rows) }; });
   await scen('warm_same', async () => { const s = `[${crypto.randomBytes(4).toString('hex')}] ` + SYS, rows = []; await once(msgs(s, 0, 'Halo, apa kabar?')); for (let i = 0; i < RUNS; i++) rows.push(await once(msgs(s, 0, 'Halo, apa kabar?'))); return { note: 'permintaan identik berulang', ...summary(rows) }; });
   await scen('kb_toggle', async () => {
-    const res = {};
+    const res = {}, mid = (rows) => { const s2 = [...rows].sort((x, y) => (x.prompt_ms ?? 0) - (y.prompt_ms ?? 0)); return s2[Math.floor((s2.length - 1) / 2)]; };   // satu baris utuh, bukan median per kolom
     for (const n of [0, 3, 6]) {
       const ctl = [], tst = [];
       for (let i = 0; i < RUNS; i++) {
-        await once(msgs(SYS, n, 'Boleh minta saran singkat?'));                 // hangatkan cache dengan system stabil
-        ctl.push(await once(msgs(SYS, n, 'Boleh minta saran sederhana?')));      // kontrol: system stabil
-        await once(msgs(SYS, n, 'Boleh minta saran singkat?'));                 // hangatkan ulang
-        tst.push(await once(msgs(SYS + KB_LINE, n, 'Boleh minta saran sederhana?')));   // uji: system + baris KB (seperti sapaan di aplikasi sekarang)
+        const nonce = `[${crypto.randomBytes(4).toString('hex')}] `, S0 = nonce + SYS, S1 = nonce + SYS + KB_LINE;   // nonce unik per iterasi: tidak ada cache lintas iterasi
+        await once(msgs(S0, n, 'Boleh minta saran singkat?'));                 // hangatkan cache dengan system stabil
+        ctl.push(await once(msgs(S0, n, 'Boleh minta saran sederhana?')));      // kontrol: system stabil
+        await once(msgs(S0, n, 'Boleh minta saran singkat?'));                 // hangatkan ulang
+        tst.push(await once(msgs(S1, n, 'Boleh minta saran sederhana?')));      // uji: system + baris KB (seperti sapaan di aplikasi sekarang)
       }
-      res['hist' + n] = { control_stable_system: summary(ctl), with_kb_in_system: summary(tst) };
+      res['hist' + n] = { control_stable_system: mid(ctl), with_kb_in_system: mid(tst), rows_control: ctl, rows_kb: tst };
     }
-    return { note: 'efek menyisipkan teks KB ke system prompt pada panjang riwayat 0/3/6 pasang; bandingkan prompt_n dan prompt_ms', ...res };
+    return { note: 'efek menyisipkan teks KB ke system prompt pada riwayat 0/3/6 pasang; tiap angka = satu baris utuh (median menurut prompt_ms); baris mentah di rows_*', ...res };
   });
   await scen('stream_ttft', async () => {
     const s = `[${crypto.randomBytes(4).toString('hex')}] ` + SYS, rows = []; await once(msgs(s, 3, 'Ceritakan satu tips singkat.'));

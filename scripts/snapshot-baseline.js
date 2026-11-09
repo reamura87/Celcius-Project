@@ -105,6 +105,9 @@ async function main() {
   console.log('Manifest     :', out);
   const bdir = get('--backup');
   if (bdir) {
+    const prob = backupTargetProblem(bdir, v.adapter.files[0]?.path || root);
+    if (prob.fatal) { console.error('\nCADANGAN TIDAK DIBUAT: ' + prob.msg + '\n(Manifest sudah tersimpan; ulangi dengan --backup <lokasi yang ada>.)'); process.exit(3); }
+    if (prob.msg) console.log('\n' + prob.msg);
     const dir = path.join(bdir, 'celcius-v1'); const sums = [];
     for (const f of v.adapter.files) { const r = await copyVerified(f.path, dir, f.sha256); console.log('  cadangan:', r.dst, '-', r.status); sums.push(`${f.sha256}  ${path.basename(f.path)}`); }
     if (a.includes('--copy-gguf') && v.gguf_active?.sha256) { const g = v.gguf_active; const r = await copyVerified(g.path, dir, g.sha256); console.log('  cadangan:', r.dst, '-', r.status); sums.push(`${g.sha256}  ${g.file}`); }
@@ -113,5 +116,11 @@ async function main() {
   } else console.log('(Belum ada cadangan salinan. Jalankan dengan --backup <folder di drive lain> — lihat docs/RECOVERY.md)');
   if (!/^COCOK/.test(v.adapter.check)) { console.error('\nPERINGATAN: ' + v.adapter.check); process.exit(2); }
 }
-module.exports = { sha256File, buildManifest, findAdapterFiles, copyVerified, EXPECTED_ADAPTER_SHA256 };
+function backupTargetProblem(bdir, sampleSource, exists = fs.existsSync) {
+  const abs = path.resolve(bdir), root = path.parse(abs).root;
+  if (!exists(root)) return { fatal: true, msg: `Lokasi "${root}" tidak ada di komputer ini. Pilih lokasi cadangan yang ada: drive lain (cek di File Explorer), flashdisk, atau folder yang disinkronkan cloud.` };
+  const same = path.parse(path.resolve(sampleSource)).root.toLowerCase() === root.toLowerCase();
+  return { fatal: false, sameDrive: same, msg: same ? `Catatan: cadangan berada di drive yang sama (${root}) dengan sumber. Ini melindungi dari salah timpa/hapus, bukan dari kerusakan disk; simpan juga satu salinan di drive atau cloud lain.` : '' };
+}
+module.exports = { backupTargetProblem, sha256File, buildManifest, findAdapterFiles, copyVerified, EXPECTED_ADAPTER_SHA256 };
 if (require.main === module) main().catch((e) => { console.error('GAGAL:', e.message); process.exit(1); });

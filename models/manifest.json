@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "created": "2026-11-07T13:00:52.424Z",
+  "created": "2026-11-08T15:27:36.809Z",
   "tool": "scripts/snapshot-baseline.js",
   "versions": [
     {
@@ -38,6 +38,12 @@
             "size": 1180,
             "sha256": "705539C14376CB922AAA4C509273A290A5088601D6AEB028A7A1613C45B9863C",
             "modified": "2026-11-07T03:01:15.384Z"
+          },
+          {
+            "path": "D:\\AI-Assistant\\adapter.zip",
+            "size": 112914630,
+            "sha256": "7542A8B0642FC406111A5D4BA626030C4B4DD8455E1AAA93FDFF1919BED9DBF0",
+            "modified": "2026-11-08T03:59:55.810Z"
           }
         ],
         "expected_sha256_reported_by_owner": "A983FAC5F8728E83476EFE4ECDE104A5E5EFFAE5D645913AE8E21F1CEC44BED2",
@@ -64,7 +70,7 @@
     "electron_range": "^45.2.1",
     "llama_server": "D:\\AI-Assistant\\llama\\llama-server.exe",
     "llama_server_version": null,
-    "git_commit": "d15f8f733b150df783332c1631af2d504be92735"
+    "git_commit": "ddabb7c1a3112fbf5be6e5b96199767582509f84"
   },
   "config_json": {
     "modelFile": "celcius-q8_0.gguf",

@@ -474,5 +474,6 @@ File yang saya terima dan baca: `main.js`, `web/index.html`, `package.json`, `co
 | M1.0 | `scripts/snapshot-baseline.js`, `docs/RECOVERY.md`, `models/manifest.json` (dihasilkan skrip) | skrip diuji pada proyek palsu (hash, perbandingan dengan hash yang dilaporkan, cadangan tanpa menimpa). **Belum dijalankan pada file asli Anda** |
 | M1.0b | `main.js` (proksi meneruskan pembatalan + penjaga error header; `listenWeb` + port tetap 18089) | tes `tests/main-patches.test.js` **gagal pada main.js lama dan lulus pada yang baru** (terhadap llama-server palsu). **Belum diuji di aplikasi Electron asli** |
 | M1.1 | `eval/` (pustaka, set uji S1–S5, `run-quality.js`, `run-perf.js`, `report.js`, perplexity), `tests/eval.test.js` | 19 tes lulus terhadap llama-server **palsu**; belum dijalankan terhadap llama-server asli (lihat `eval/README.md`) |
+| M1.0c | `web/index.html` (`kbContext`: entri KB bawaan tidak disuntikkan ke system prompt; entri hasil ajar bertanda `t:1`), `main.js` (`pickFallbackModel`: tidak menebak bila >1 `.gguf`; berkas "lora" dikecualikan) | disetujui 8 Nov 2026. `tests/m1_0c.test.js`: 4 tes **gagal pada versi sebelumnya dan lulus pada yang baru**. **Belum diuji di aplikasi asli** |
 
 Perintah uji: `node --test` (dari folder proyek).

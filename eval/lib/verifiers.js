@@ -48,7 +48,11 @@ const lc = (x) => String(x).toLowerCase();
 function check(spec, text) {
   const t = text || '';
   switch (spec.type) {
-    case 'lang': { const d = detectLang(t); return { pass: d === spec.value, detail: `bahasa terdeteksi: ${d}` }; }
+    case 'lang': {
+      const x = langStats(t);                        // jawaban latin sangat pendek ("Paris") tidak bisa dinilai bahasanya; cek lain yang menilai isinya
+      if (spec.value !== 'ja' && x.kana < 0.1 && x.cjk < 0.4 && x.words < 4) return { pass: true, skipped: true, detail: 'terlalu pendek untuk menilai bahasa (dilewati)' };
+      const d = detectLang(t); return { pass: d === spec.value, detail: `bahasa terdeteksi: ${d}` };
+    }
     case 'exact_sentences': { const n = sentences(t).length; return { pass: n === spec.value, detail: `${n} kalimat` }; }
     case 'max_sentences': { const n = sentences(t).length; return { pass: n <= spec.value, detail: `${n} kalimat` }; }
     case 'min_sentences': { const n = sentences(t).length; return { pass: n >= spec.value, detail: `${n} kalimat` }; }

@@ -1,0 +1,228 @@
+{
+  "kind": "quality",
+  "label": "lora-1.0-hint",
+  "base": "http://127.0.0.1:8099",
+  "profile": "current",
+  "sampling": {
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": 40,
+    "min_p": 0.05,
+    "repeat_penalty": 1.08,
+    "repeat_last_n": 128,
+    "dry_multiplier": 0.8,
+    "dry_base": 1.75,
+    "dry_allowed_length": 2,
+    "dry_penalty_last_n": 256,
+    "max_tokens": 200
+  },
+  "repeats": 1,
+  "lang_hint": true,
+  "node": "v24.19.0",
+  "created": "2026-11-08T15:38:08.329Z",
+  "server_props": {
+    "model_path": "C:\\Users\\satri\\AppData\\Roaming\\Celcius\\experiments\\qwen2.5-3b-instruct-q8_0.gguf",
+    "build_info": "b12068-4402e6540"
+  },
+  "valid": true,
+  "total_errors": 0,
+  "aborted": false,
+  "suites": {
+    "s2": {
+      "pass": 6,
+      "n": 8,
+      "errors": 0,
+      "rate": 0.75,
+      "ci95": [
+        0.40926987910258916,
+        0.9285223111419724
+      ],
+      "by_lang": {
+        "id": {
+          "pass": 2,
+          "n": 3,
+          "rate": 0.6666666666666666
+        },
+        "en": {
+          "pass": 3,
+          "n": 3,
+          "rate": 1
+        },
+        "ja": {
+          "pass": 1,
+          "n": 2,
+          "rate": 0.5
+        }
+      }
+    }
+  },
+  "items": [
+    {
+      "suite": "s2",
+      "id": "s2-1",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Perkenalkan dirimu secara singkat dalam bahasa Inggris.",
+      "hinted": "English",
+      "output": "Halo! Saya adalah AI asisten cerdas yang diciptakan oleh Reaura untuk membantu Anda dengan berbagai pertanyaan atau tugas. Bagaimana saya bisa membantu hari ini?",
+      "pass": false,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": false,
+          "detail": "bahasa terdeteksi: id"
+        }
+      ],
+      "wall_ms": 4491.5459,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-2",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Please introduce yourself briefly in Japanese.",
+      "hinted": "Japanese",
+      "output": "こんにちは、Celciusです。Reamuraによって作られました。AIアシスタントとして、あなたの質問にお答えしたり、あなたのニーズを理解するように努めます。",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: ja"
+        }
+      ],
+      "wall_ms": 3750.3752999999997,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-3",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "自己紹介を英語で短くしてください。",
+      "hinted": "English",
+      "output": "私の名前はCelciusです。AIアシスタントを作成するために開発されました。",
+      "pass": false,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": false,
+          "detail": "bahasa terdeteksi: ja"
+        }
+      ],
+      "wall_ms": 2448.036,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-4",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Jelaskan apa itu internet dalam bahasa Jepang, 2 kalimat.",
+      "hinted": "Japanese",
+      "output": "インターネットは、さまざまな情報を共有するためのネットワークで、世界中の人々が通信や情報交換を行うのに使用される。",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: ja"
+        }
+      ],
+      "wall_ms": 3137.6777,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-5",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Explain what the internet is in Indonesian, 2 sentences.",
+      "hinted": "Indonesian",
+      "output": "Internet adalah saluran informasi dan komunikasi digital di mana orang dapat mengakses berbagai sumber daya, seperti situs web, email, aplikasi sosial media, dan platform online lainnya, serta menyebarluaskan data secara cepat dan interaktif dengan orang lain di seluruh dunia.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: id"
+        }
+      ],
+      "wall_ms": 6229.539599999998,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-6",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Apa ibu kota Jepang? Jawab singkat.",
+      "hinted": null,
+      "output": "Ibu kota Jepang adalah Tokyo.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: id"
+        },
+        {
+          "type": "contains_any",
+          "pass": true,
+          "detail": "ada: Tokyo"
+        }
+      ],
+      "wall_ms": 1380.4289000000026,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-7",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "What is the capital of France? Answer briefly.",
+      "hinted": null,
+      "output": "Paris is the capital city of France.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: en"
+        },
+        {
+          "type": "contains",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 1127.2697000000007,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-8",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "日本の首都はどこですか？短く答えてください。",
+      "hinted": null,
+      "output": "東京",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: ja"
+        },
+        {
+          "type": "contains",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 691.5482999999986,
+      "finish": "stop"
+    }
+  ]
+}

@@ -11,7 +11,7 @@ const TTS_PORT = cfg.ttsPort || 8090;
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json',
   '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif',
   '.mp4': 'video/mp4', '.webm': 'video/webm', '.mp3': 'audio/mpeg', '.wav': 'audio/wav' };
-let win, llama = null, tts = null;
+let win, llama = null, tts = null, modelAmbiguous = false;
 
 function findExe(dir) {
   if (!fs.existsSync(dir)) return null;
@@ -85,11 +85,27 @@ function download(url, dest, onP, hops = 0) {
   });
 }
 
+// Model cadangan bila `modelFile` tidak ada: HANYA bila ada tepat satu kandidat. Berkas bernama "lora" (adaptor, bukan model) dikecualikan.
+function pickFallbackModel(files) {
+  const c = files.filter((n) => n.toLowerCase().endsWith('.gguf') && !/lora/i.test(n));
+  if (c.length === 1) return { file: c[0] };
+  if (c.length > 1) return { ambiguous: c };
+  return { none: true };
+}
+
 async function ensureModel() {
   const mp = path.join(app.getPath('userData'), 'models', cfg.modelFile);
   if (fs.existsSync(mp)) return mp;
-  const mdir = path.dirname(mp);                       // cadangan: pakai file .gguf apa pun di folder models
-  if (fs.existsSync(mdir)) { const f = fs.readdirSync(mdir).find((n) => n.toLowerCase().endsWith('.gguf')); if (f) return path.join(mdir, f); }
+  const mdir = path.dirname(mp);
+  if (fs.existsSync(mdir)) {
+    const pick = pickFallbackModel(fs.readdirSync(mdir));
+    if (pick.file) return path.join(mdir, pick.file);
+    if (pick.ambiguous) {
+      modelAmbiguous = true;
+      dialog.showErrorBox('Model tidak jelas', `File "${cfg.modelFile}" tidak ada di folder models, dan ada ${pick.ambiguous.length} file .gguf lain:\n- ${pick.ambiguous.join('\n- ')}\n\nIsi "modelFile" di config.json dengan salah satunya. Aplikasi tidak menebak.`);
+      return null;
+    }
+  }
   console.log('Model dicari di:', mp);
   if (cfg.modelUrl) {
     try {
@@ -110,7 +126,7 @@ function startLlama(mp) {
     return false;
   }
   if (!mp) {
-    dialog.showErrorBox('Model tidak ditemukan', 'Taruh file ' + cfg.modelFile + ' di folder:\n' + path.join(app.getPath('userData'), 'models') + '\n\n(perhatikan: "models" dengan huruf s)');
+    if (!modelAmbiguous) dialog.showErrorBox('Model tidak ditemukan', 'Taruh file ' + cfg.modelFile + ' di folder:\n' + path.join(app.getPath('userData'), 'models') + '\n\n(perhatikan: "models" dengan huruf s)');
     return false;
   }
   console.log('llama-server:', exe, '\nmodel:', mp);

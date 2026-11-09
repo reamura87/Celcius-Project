@@ -1,0 +1,9 @@
+# Kualitas — base-only-hint
+
+Profil: current · server: http://127.0.0.1:8099 · 2026-11-08T05:59:44.100Z
+
+| Suite | Lulus | n | Error | Tingkat | 95% CI (Wilson) |
+|---|---:|---:|---:|---:|---|
+| s2 | 8 | 8 | 0 | 100% | 68–100% |
+
+_Sampel kecil: selang kepercayaan lebar. Jangan menarik kesimpulan dari selisih kecil. Butir yang GAGAL perlu diperiksa manual di berkas .json (bagian `items`)._

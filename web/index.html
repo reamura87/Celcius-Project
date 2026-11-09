@@ -36,11 +36,15 @@ const save=()=>localStorage.setItem('kb',JSON.stringify(KB));
 const tok=s=>s.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu,'').split(/\s+/).filter(Boolean);
 function sim(a,b){const A=new Set(tok(a)),B=new Set(tok(b));if(!A.size||!B.size)return 0;
  let n=0;A.forEach(x=>B.has(x)&&n++);return n/Math.sqrt(A.size*B.size)}
+/* Entri bawaan (DEFAULT) hanya untuk otak cadangan. JANGAN disuntikkan ke system prompt: menambah 0,6–3,5 s pada giliran yang terkena, mis. sapaan (docs/BASELINE_RESULTS.md). */
+const DEFAULT_Q=new Set(DEFAULT.map(d=>d.q));
+const isTaught=k=>k.t===1||!DEFAULT_Q.has(k.q);
+function kbContext(text){return KB.filter(isTaught).map(k=>[sim(text,k.q),k]).filter(x=>x[0]>0.3).sort((a,b)=>b[0]-a[0]).slice(0,3).map(x=>x[1].q+' => '+x[1].a)}
 let pending=null;
 function think(text){
- if(pending){KB.push({q:pending,a:text});save();const p=pending;pending=null;return {a:`Oke, aku ingat: "${p}" → "${text}"`,act:"nod"}}
+ if(pending){KB.push({q:pending,a:text,t:1});save();const p=pending;pending=null;return {a:`Oke, aku ingat: "${p}" → "${text}"`,act:"nod"}}
  const m=text.match(/^ajari\s*:\s*(.+?)\s*=>\s*(.+)$/i);
- if(m){KB.push({q:m[1],a:m[2]});save();return {a:"Sudah kupelajari!",act:"nod"}}
+ if(m){KB.push({q:m[1],a:m[2],t:1});save();return {a:"Sudah kupelajari!",act:"nod"}}
  let best=null,s=0;for(const k of KB){const v=sim(text,k.q);if(v>s){s=v;best=k}}
  if(best&&s>=0.5)return best;
  pending=text;return {a:"Aku belum tahu jawabannya. Kamu mau ajari aku? Ketik jawabannya sekarang."}}
@@ -264,7 +268,7 @@ async function handle(text){
  const om=text.match(/(?:ganti|pakai|ubah)\s+(?:baju|pakaian|outfit)(?:\s+(?:ke|jadi|dengan))?\s+(\S+)/i);
  if(om){const ok=setOutfit(om[1]);const r=ok?`Oke, aku pakai ${om[1]}!`:`Aku belum punya pakaian "${om[1]}". Yang ada: ${Object.keys(outfits).join(', ')||'(belum ada)'}.`;say('ai',r);speak(r);if(ok)play('nod');return}
  const nm=text.match(/(?:namaku|nama saya)\s+(\p{L}+)/iu);if(nm)localStorage.setItem('uname',nm[1]);
- const ctx=KB.map(k=>[sim(text,k.q),k]).filter(x=>x[0]>0.3).sort((a,b)=>b[0]-a[0]).slice(0,3).map(x=>x[1].q+' => '+x[1].a);
+ const ctx=kbContext(text);
  try{
   learnIdentity(text);const g=gestureOf(text);if(g)play(g);
   const res=await fetch('/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json'},
@@ -289,7 +293,7 @@ document.getElementById('exp').onclick=()=>{const a=document.createElement('a');
  a.href=URL.createObjectURL(new Blob([JSON.stringify(KB,null,2)],{type:'application/json'}));a.download='knowledge.json';a.click()};
 document.getElementById('imp').onclick=()=>document.getElementById('impFile').click();
 document.getElementById('impFile').onchange=async e=>{const d=JSON.parse(await e.target.files[0].text());
- KB=KB.concat(d);save();say('ai',`Aku mempelajari ${d.length} pengetahuan baru.`)};
+ KB=KB.concat(d.map(x=>({...x,t:1})));save();say('ai',`Aku mempelajari ${d.length} pengetahuan baru.`)};
 say('ai','Pilih file .vrm di kanan atas, lalu ketik "halo".');
 
 /* Pemanasan cache prompt: awalan system prompt dihitung sekali saat aplikasi dibuka, sehingga pesan pertama tidak menunggu ±4,6 s */

@@ -41,3 +41,8 @@ Opsi `llama-perplexity` belum diverifikasi pada build Anda; bila error, kirim ke
 - Apakah llama-server asli mengembalikan `timings` (`prompt_n`, `cache_n`, `prompt_ms`, …) pada respons non-stream. Bila kolom bernilai `–`, kirim satu berkas hasil agar saya sesuaikan pembacanya.
 - `cache_n` mungkin tidak ada di build Anda; `prompt_n` (token yang benar-benar diproses) tetap cukup untuk membaca efek cache.
 - Heuristik bahasa (stopword + aksara) dan cek persona berbasis kata bisa salah pada kasus tepi; periksa butir yang GAGAL secara manual pada run pertama sebelum mempercayai angkanya.
+
+## Membandingkan model lain (M1.2/M1.3) dan eksperimen petunjuk bahasa
+- `--lang-hint` pada `run-quality.js`: bila prompt meminta bahasa tertentu, ditambahkan "(Reply only in X.)" ke pesan pengguna. Ini eksperimen untuk mengukur manfaat IntentRouter bahasa tanpa training; bukan perubahan aplikasi.
+- `eval\m1_3_base_and_lora_colab.ipynb`: membuat GGUF model dasar (kontrol) dan adaptor GGUF-LoRA. Cara menjalankan llama-server uji di port 8099 ada di sel terakhir notebook.
+- Bandingkan: `node eval\report.js eval\results\A_quality.json eval\results\B_quality.json`.

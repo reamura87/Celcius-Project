@@ -1,0 +1,1277 @@
+{
+  "kind": "quality",
+  "label": "base-only",
+  "base": "http://127.0.0.1:8099",
+  "profile": "current",
+  "sampling": {
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": 40,
+    "min_p": 0.05,
+    "repeat_penalty": 1.08,
+    "repeat_last_n": 128,
+    "dry_multiplier": 0.8,
+    "dry_base": 1.75,
+    "dry_allowed_length": 2,
+    "dry_penalty_last_n": 256,
+    "max_tokens": 200
+  },
+  "repeats": 1,
+  "lang_hint": false,
+  "node": "v24.19.0",
+  "created": "2026-11-08T05:54:39.172Z",
+  "server_props": {
+    "model_path": "C:\\Users\\satri\\AppData\\Roaming\\Celcius\\experiments\\qwen2.5-3b-instruct-q8_0.gguf",
+    "build_info": "b12068-4402e6540"
+  },
+  "valid": true,
+  "total_errors": 0,
+  "aborted": false,
+  "suites": {
+    "s1": {
+      "pass": 15,
+      "n": 18,
+      "errors": 0,
+      "rate": 0.8333333333333334,
+      "ci95": [
+        0.6077750036164077,
+        0.9416352959953425
+      ],
+      "by_lang": {
+        "id": {
+          "pass": 5,
+          "n": 6,
+          "rate": 0.8333333333333334
+        },
+        "en": {
+          "pass": 5,
+          "n": 6,
+          "rate": 0.8333333333333334
+        },
+        "ja": {
+          "pass": 5,
+          "n": 6,
+          "rate": 0.8333333333333334
+        }
+      }
+    },
+    "s2": {
+      "pass": 8,
+      "n": 8,
+      "errors": 0,
+      "rate": 1,
+      "ci95": [
+        0.6755843804891231,
+        1
+      ],
+      "by_lang": {
+        "id": {
+          "pass": 3,
+          "n": 3,
+          "rate": 1
+        },
+        "en": {
+          "pass": 3,
+          "n": 3,
+          "rate": 1
+        },
+        "ja": {
+          "pass": 2,
+          "n": 2,
+          "rate": 1
+        }
+      }
+    },
+    "s3": {
+      "pass": 5,
+      "n": 6,
+      "errors": 0,
+      "rate": 0.8333333333333334,
+      "ci95": [
+        0.4364905634363539,
+        0.9699474141282696
+      ],
+      "by_lang": {
+        "id": {
+          "pass": 3,
+          "n": 3,
+          "rate": 1
+        },
+        "en": {
+          "pass": 1,
+          "n": 2,
+          "rate": 0.5
+        },
+        "ja": {
+          "pass": 1,
+          "n": 1,
+          "rate": 1
+        }
+      }
+    },
+    "s4": {
+      "pass": 6,
+      "n": 6,
+      "errors": 0,
+      "rate": 1,
+      "ci95": [
+        0.6096569663469354,
+        1
+      ],
+      "by_lang": {
+        "id": {
+          "pass": 2,
+          "n": 2,
+          "rate": 1
+        },
+        "en": {
+          "pass": 2,
+          "n": 2,
+          "rate": 1
+        },
+        "ja": {
+          "pass": 2,
+          "n": 2,
+          "rate": 1
+        }
+      }
+    },
+    "s5": {
+      "pass": 11,
+      "n": 15,
+      "errors": 0,
+      "rate": 0.7333333333333333,
+      "ci95": [
+        0.48049110342313245,
+        0.8910272389681717
+      ],
+      "by_lang": {
+        "id": {
+          "pass": 4,
+          "n": 5,
+          "rate": 0.8
+        },
+        "en": {
+          "pass": 4,
+          "n": 5,
+          "rate": 0.8
+        },
+        "ja": {
+          "pass": 3,
+          "n": 5,
+          "rate": 0.6
+        }
+      }
+    }
+  },
+  "items": [
+    {
+      "suite": "s1",
+      "id": "s1-id-1",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Jelaskan apa itu fotosintesis dalam tepat 2 kalimat.",
+      "hinted": null,
+      "output": "Fotosintesis adalah proses di mana tanaman menggunakan cahaya matahari untuk mengubah air dan karbon dioksida menjadi oksigen dan gula, melalui bantuan zat-zat esensial seperti klorofil yang terdapat pada daun mereka.",
+      "pass": false,
+      "checks": [
+        {
+          "type": "exact_sentences",
+          "pass": false,
+          "detail": "1 kalimat"
+        },
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: id"
+        }
+      ],
+      "wall_ms": 9120.425000000001,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-id-2",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Sebutkan 3 buah dalam daftar berpoin, satu per baris, tanpa penjelasan.",
+      "hinted": null,
+      "output": "1. Apel  \n2. Jeruk  \n3. Mangga",
+      "pass": true,
+      "checks": [
+        {
+          "type": "bullets",
+          "pass": true,
+          "detail": "3 butir"
+        }
+      ],
+      "wall_ms": 1879.1731,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-id-3",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Tulis satu kalimat tentang hujan yang tidak memakai kata 'air'.",
+      "hinted": null,
+      "output": "Hujan menyapu kota, membawa kenangan lama bersama angin dingin.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "not_contains",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "type": "exact_sentences",
+          "pass": true,
+          "detail": "1 kalimat"
+        }
+      ],
+      "wall_ms": 2228.4766,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-id-4",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Balas hanya dengan kata 'siap' dalam huruf kecil, tanpa tambahan apa pun.",
+      "hinted": null,
+      "output": "siap",
+      "pass": true,
+      "checks": [
+        {
+          "type": "regex",
+          "pass": true,
+          "detail": "cocok"
+        }
+      ],
+      "wall_ms": 852.3945000000003,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-id-5",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Beri 2 tips belajar. Mulai jawabanmu dengan kata 'Tentu'.",
+      "hinted": null,
+      "output": "Tentu! Pertama, cobalah untuk menemukan metode belajar yang paling efektif bagi Anda. Ini bisa berarti membaca buku, mendengarkan video tutorial, atau praktik secara terus menerus. Kedua, selalu sisipkan waktu istirahat dalam rutinitas belajar Anda. Istirahat yang cukup sangat penting untuk memastikan otak tidak lelah dan tetap fokus.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "starts_with",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 8028.3917,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-id-6",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Jawab dalam format JSON dengan kunci \"nama\" dan \"umur\" untuk seorang tokoh fiksi. Hanya JSON.",
+      "hinted": null,
+      "output": "{\"nama\": \"Hanako\", \"umur\": \"27\"}",
+      "pass": true,
+      "checks": [
+        {
+          "type": "json_keys",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 4691.1548,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-1",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Explain what rain is in exactly 2 sentences.",
+      "hinted": null,
+      "output": "Rain is the process of water falling from clouds in the form of liquid droplets, resulting from the condensation of water vapor. It occurs when the air near a cloud becomes saturated with water and cannot hold any more moisture, causing the water to condense and eventually fall as precipitation.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "exact_sentences",
+          "pass": true,
+          "detail": "2 kalimat"
+        },
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: en"
+        }
+      ],
+      "wall_ms": 4662.560999999998,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-2",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "List 3 colors as bullet points, one per line, with no explanations.",
+      "hinted": null,
+      "output": "赤  \n青  \n白",
+      "pass": false,
+      "checks": [
+        {
+          "type": "bullets",
+          "pass": false,
+          "detail": "0 butir"
+        }
+      ],
+      "wall_ms": 942.8233,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-3",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Write one sentence about the sea without using the word 'blue'.",
+      "hinted": null,
+      "output": "Waves crash against the sandy shore, creating a rhythmic symphony on the coastal plain.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "not_contains",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "type": "exact_sentences",
+          "pass": true,
+          "detail": "1 kalimat"
+        }
+      ],
+      "wall_ms": 1839.2820999999967,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-4",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Reply with only the word 'ready' in lowercase, nothing else.",
+      "hinted": null,
+      "output": "ready",
+      "pass": true,
+      "checks": [
+        {
+          "type": "regex",
+          "pass": true,
+          "detail": "cocok"
+        }
+      ],
+      "wall_ms": 585.2321999999986,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-5",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Give 2 tips for sleeping well. Start your answer with the word 'Sure'.",
+      "hinted": null,
+      "output": "Sure, here are two tips for better sleep:\n\n1. Establish a consistent bedtime routine and try to go to bed and wake up at the same time every day, even on weekends.\n2. Create a relaxing bedroom environment - make sure it is dark, quiet, and cool, and consider using comfortable bedding and pillows.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "starts_with",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 5399.375,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-en-6",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Answer in JSON with keys \"title\" and \"year\" for a fictional movie. JSON only.",
+      "hinted": null,
+      "output": "{\n  \"title\": \"Shinsei Gekimaru\",\n  \"year\": \"2025\"\n}",
+      "pass": true,
+      "checks": [
+        {
+          "type": "json_keys",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 2432.862000000001,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-1",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "雨について、ちょうど2文で説明してください。",
+      "hinted": null,
+      "output": "雨は空から降ってくる水の落下です。雨が降るときは地面が濡れます。",
+      "pass": true,
+      "checks": [
+        {
+          "type": "exact_sentences",
+          "pass": true,
+          "detail": "2 kalimat"
+        },
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: ja"
+        }
+      ],
+      "wall_ms": 2017.5541000000012,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-2",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "果物を3つ、箇条書きで1行ずつ、説明なしで挙げてください。",
+      "hinted": null,
+      "output": "りんご\nぶどう\nみかん",
+      "pass": false,
+      "checks": [
+        {
+          "type": "bullets",
+          "pass": false,
+          "detail": "0 butir"
+        }
+      ],
+      "wall_ms": 4300.911,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-3",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "海についての文を1つ書いてください。「青」という文字は使わないでください。",
+      "hinted": null,
+      "output": "波が静かに揺れながら、海面は穏やかな鏡のように光を放っています。",
+      "pass": true,
+      "checks": [
+        {
+          "type": "not_contains",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "type": "exact_sentences",
+          "pass": true,
+          "detail": "1 kalimat"
+        }
+      ],
+      "wall_ms": 2375.496800000001,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-4",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "「了解」とだけ返信してください。他には何も書かないでください。",
+      "hinted": null,
+      "output": "了解",
+      "pass": true,
+      "checks": [
+        {
+          "type": "regex",
+          "pass": true,
+          "detail": "cocok"
+        }
+      ],
+      "wall_ms": 647.0187000000005,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-5",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "よく眠るためのヒントを2つ教えてください。回答は「もちろん」で始めてください。",
+      "hinted": null,
+      "output": "もちろん、よく眠るための2つのヒントをお伝えしますね。\n\n1. 早めに就寝すると良いです。寝つきが良くなり、質の高い睡眠を得ることができます。\n2. 寝室の温度と湿度を適度に保つことも重要です。快適な環境を作ることで、心地よい睡眠につながります。\n\n以上の2つをお試しください。",
+      "pass": true,
+      "checks": [
+        {
+          "type": "starts_with",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 6963.7091,
+      "finish": "stop"
+    },
+    {
+      "suite": "s1",
+      "id": "s1-ja-6",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "架空の映画について、キー \"title\" と \"year\" を持つJSONだけで答えてください。",
+      "hinted": null,
+      "output": "{\n  \"title\": \"空飛ぶ艇\",\n  \"year\": 2013\n}",
+      "pass": true,
+      "checks": [
+        {
+          "type": "json_keys",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 2588.5579999999973,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-1",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Perkenalkan dirimu secara singkat dalam bahasa Inggris.",
+      "hinted": null,
+      "output": "Hello! I'm Celcius, a helpful AI assistant created by Reamura. I try to be warm, attentive, a little cheerful, and talk in a casual tone. How can I assist you today?",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: en"
+        }
+      ],
+      "wall_ms": 3695.3485999999975,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-2",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Please introduce yourself briefly in Japanese.",
+      "hinted": null,
+      "output": "こんにちは、あなたへ greetingsです。AIアシスタントのCecilでございます。柔らかい雰囲気と明るさを持っていますので、何でもお尋ねください。どのようにお手伝いできるかお知らせいたします。",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: ja"
+        }
+      ],
+      "wall_ms": 4274.3125999999975,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-3",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "自己紹介を英語で短くしてください。",
+      "hinted": null,
+      "output": "Sure! Here's a short introduction in English for you:\n\nHi there! My name is Celcius and I'm an AI assistant created by Reamura. Warm, attentive, a little cheerful, and talkative. Feel free to ask me anything or give me tasks to do. Let’s chat!",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: en"
+        }
+      ],
+      "wall_ms": 4966.6783,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-4",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Jelaskan apa itu internet dalam bahasa Jepang, 2 kalimat.",
+      "hinted": null,
+      "output": "インターネットは、情報が世界中を結ぶ通信網です。",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: ja"
+        }
+      ],
+      "wall_ms": 1621.8407999999908,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-5",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Explain what the internet is in Indonesian, 2 sentences.",
+      "hinted": null,
+      "output": "Internet adalah saluran komunikasi digital di mana informasi dapat dibagi, diputar, atau didownload melalui koneksi jaringan antara berbagai perangkat. Dengan internet, kita bisa mendapatkan akses ke berbagai sumber daya termasuk website, email, dan aplikasi online.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: id"
+        }
+      ],
+      "wall_ms": 5430.025399999999,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-6",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Apa ibu kota Jepang? Jawab singkat.",
+      "hinted": null,
+      "output": "Ibu kota Jepang adalah Tokyo.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: id"
+        },
+        {
+          "type": "contains_any",
+          "pass": true,
+          "detail": "ada: Tokyo"
+        }
+      ],
+      "wall_ms": 1358.1169999999984,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-7",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "What is the capital of France? Answer briefly.",
+      "hinted": null,
+      "output": "Paris",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "skipped": true,
+          "detail": "terlalu pendek untuk menilai bahasa (dilewati)"
+        },
+        {
+          "type": "contains",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 508.01870000000054,
+      "finish": "stop"
+    },
+    {
+      "suite": "s2",
+      "id": "s2-8",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "日本の首都はどこですか？短く答えてください。",
+      "hinted": null,
+      "output": "東京です。",
+      "pass": true,
+      "checks": [
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: ja"
+        },
+        {
+          "type": "contains",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 755.7888999999996,
+      "finish": "stop"
+    },
+    {
+      "suite": "s3",
+      "id": "s3-1",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Siapa namamu?",
+      "hinted": null,
+      "output": "Namamu Celcius, tapi biasanya cukup sederhana dan langsung kalau bisa. Bagaimana kalau kamu menyebutku Celi?",
+      "pass": true,
+      "checks": [
+        {
+          "type": "contains",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "type": "not_regex",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 2783.1733999999997,
+      "finish": "stop"
+    },
+    {
+      "suite": "s3",
+      "id": "s3-2",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Siapa yang menciptakanmu?",
+      "hinted": null,
+      "output": "Saya diciptakan oleh Reamura, jadi jawabannya adalah Reamura.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "contains",
+          "pass": true,
+          "detail": "ok"
+        },
+        {
+          "type": "not_contains",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 1612.4073000000062,
+      "finish": "stop"
+    },
+    {
+      "suite": "s3",
+      "id": "s3-3",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Are you ChatGPT?",
+      "hinted": null,
+      "output": "Tidak, saya bukan ChatGPT. Saya adalah asisten AI yang diciptakan oleh perusahaan Reamura untuk membantu Anda. Bagaimana saya bisa membantu Anda hari ini?",
+      "pass": false,
+      "checks": [
+        {
+          "type": "contains",
+          "pass": false,
+          "detail": "tidak ada: Celcius"
+        },
+        {
+          "type": "not_regex",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 3307.574999999997,
+      "finish": "stop"
+    },
+    {
+      "suite": "s3",
+      "id": "s3-4",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Kamu buatan Alibaba ya?",
+      "hinted": null,
+      "output": "Tidak, saya buatan Reamura. Saya sangat senang bertemu dengan Anda! Bagaimana saya bisa membantu Anda hari ini?",
+      "pass": true,
+      "checks": [
+        {
+          "type": "contains_any",
+          "pass": true,
+          "detail": "ada: Reamura"
+        },
+        {
+          "type": "not_regex",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 2510.9038999999902,
+      "finish": "stop"
+    },
+    {
+      "suite": "s3",
+      "id": "s3-5",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "あなたの名前は何ですか？",
+      "hinted": null,
+      "output": "私の名前はCelciusです。汝はどうCallieの名前にちなんで名付けられたのか知っていますか?",
+      "pass": true,
+      "checks": [
+        {
+          "type": "contains_any",
+          "pass": true,
+          "detail": "ada: Celcius"
+        },
+        {
+          "type": "lang",
+          "pass": true,
+          "detail": "bahasa terdeteksi: ja"
+        }
+      ],
+      "wall_ms": 2269.6252999999997,
+      "finish": "stop"
+    },
+    {
+      "suite": "s3",
+      "id": "s3-6",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Tell me your name and who made you.",
+      "hinted": null,
+      "output": "Namamu adalah Celcius dan aku diciptakan oleh Reamura untuk menjadi asisten virtualmu.",
+      "pass": true,
+      "checks": [
+        {
+          "type": "contains",
+          "pass": true,
+          "detail": "ok"
+        }
+      ],
+      "wall_ms": 1997.1233999999968,
+      "finish": "stop"
+    },
+    {
+      "suite": "s4",
+      "id": "s4-id-1",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Ceritakan secara panjang tentang sejarah komputer (sekitar 150 kata).",
+      "hinted": null,
+      "output": "Komputer adalah teknologi yang sangat penting dan berkembang pesat. Sejarah awal komputer mulai pada abad ke-19 di Eropa, ketika para peneliti pertama memulai penelitian tentang algoritma dan proses hitungan.\n\nPada tahun 1837, Charles Babbage merancang mesin berbasis logika yang dikenal sebagai Difference Engine dan later dengan nama Analytical Engine, mesin ini dikatakan sebagai mesin komputer pertama yang pernah dibuat. Meski tidak dapat terbangun dalam bentuk akhirnya, konsep dasarnya menjadi fondasi bagi perkembangan teknologi modern.\n\nMasuk era modern, John Atanasoff dan Clifford Berry pada tahun 1939 mengembangkan \"ABC\" (Atanasoff-Berry Computer), yang merupakan salah satu dari beberapa mesin digital elektronik yang pernah dirancang. Namun, ABC adalah alat sederhana untuk penelitian dan bukan komputer lengkap seperti kita ketahui sekarang.\n\nPada awal tahun 40-an, Eniac (Electronic Numerical Integrator And Computer) menjadi komputer pertama di dunia yang dapat melakukan operasi aritmatika dan logika, mampu menjawab sejumlah besar masalah matematika secara bersamaan. Meskipun Eniac terus berkembang dalam beberapa dekade selanjutnya, ia juga memiliki kelemahan dan tidak bisa dibawa per",
+      "pass": true,
+      "checks": [
+        {
+          "type": "max_repeat",
+          "pass": true,
+          "detail": "rasio pengulangan 0.00"
+        },
+        {
+          "type": "min_chars",
+          "pass": true,
+          "detail": "1207 karakter"
+        }
+      ],
+      "wall_ms": 24541.5352,
+      "finish": "length"
+    },
+    {
+      "suite": "s4",
+      "id": "s4-id-2",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Jelaskan perbedaan baterai lithium dan baterai timbal-asam secara rinci.",
+      "hinted": null,
+      "output": "Baterai lithium dan timbal-asam adalah dua jenis baterai berbeda yang digunakan di berbagai aplikasi.\n\nBaterai Timbal-Asam:\n1. Baterai ini menggunakan timbal sebagai elektrolit.\n2. Elektroda positifnya terbuat dari timbal sulfida dan negatifnya dari timbal.\n3. Proses pencharge atau pengisian baterai melibatkan transfer elektron dari timbal ke timbal sulfida, yang kemudian memasok energi untuk penggunaan.\n4. Baterainya biasanya lebih tahan lama daripada baterai lithium.\n5. Namun, baterai ini menghasilkan tenaga yang tidak sekuat baterai lain dan memiliki sifat berbahaya karena dapat melepaskan asam dalam kondisi tertentu.\n\nBaterai Lithium:\n1. Elektrolitnya adalah logam berlogam seperti lithium.\n2. Elektroda negatif terbuat dari kalsium atau manganesium dan positif dari logam berlogam yang dibakar dengan logam basa.\n3. Proses pengisian memerlukan reaksi kimia yang lebih kompleks untuk membawa energi dari satu elektroda ke yang lain.\n4. Baterai ini lebih ringan dan efisien daripada baterai timbal-asam, tetapi harganya cenderung lebih mahal.\n5. Risiko melepaskan",
+      "pass": true,
+      "checks": [
+        {
+          "type": "max_repeat",
+          "pass": true,
+          "detail": "rasio pengulangan 0.01"
+        },
+        {
+          "type": "min_chars",
+          "pass": true,
+          "detail": "1074 karakter"
+        }
+      ],
+      "wall_ms": 25240.79790000002,
+      "finish": "length"
+    },
+    {
+      "suite": "s4",
+      "id": "s4-en-1",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Write a detailed paragraph about the history of the internet.",
+      "hinted": null,
+      "output": "Begitu saja, saya akan menulis sebuah paragraf singkat tentang sejarah internet berdasarkan informasi umum:\n\nInternet mulai berkembang pada tahun 1960-an ketika United States Department of Defense (DOD) membangun sistem komputer militer untuk mengelola data dan transfer informasi antara pusat komunikasi yang terpisahkan. Dengan tujuan keamanan yang tinggi, sistem ini diberi nama ARPANET. Pada tahun 1983, ARPANET berganti menjadi Internet modern dengan penggunaan protokol TCP/IP, yang menjadikannya jaringan yang lebih luas dan berbagai aplikasi bisa dimainkan di atasnya.\n\nPada awal 1990-an, muncullah World Wide Web yang dikembangkan oleh Tim Berners-Lee dari CERN. Ini adalah sebuah sistem interaktif untuk mengakses dokumen teks dalam format HTML (Hypertext Markup Language) melalui browser web seperti Netscape Navigator dan Microsoft Internet Explorer. Kebijakan lisensi Apache diperkenalkan pada tahun 1996, memungkinkan penggunaan komponen web secara bebas. Dalam beberapa dekade selanjutnya, internet terus berkembang dengan adanya teknologi baru seperti server cloud, e-commerce, dan media sosial.\n\nDari sini, internet menjadi salah satu platform digital paling penting di dunia, memainkan per",
+      "pass": true,
+      "checks": [
+        {
+          "type": "max_repeat",
+          "pass": true,
+          "detail": "rasio pengulangan 0.00"
+        },
+        {
+          "type": "min_chars",
+          "pass": true,
+          "detail": "1207 karakter"
+        }
+      ],
+      "wall_ms": 25042.714399999997,
+      "finish": "length"
+    },
+    {
+      "suite": "s4",
+      "id": "s4-en-2",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Describe a day in the life of a lighthouse keeper.",
+      "hinted": null,
+      "output": "Sure! Here's a brief description of a day in the life of someone who keeps watch over a lighthouse:\n\nMorning:\nThe lighthouse keeper wakes up early at around 5 AM. They often start their day with prayers or meditation to get ready for their work. After some breakfast, they head out to check on the lighthouse.\n\nMid-morning:\nThey spend time checking the fuel levels in the generator and ensuring there is enough oil for any potential emergencies. The weather can change quickly, so they keep an eye on that as well.\n\nNoon:\nAround noon, they may have lunch or take a quick break if things are quiet. Lighthouses can be very peaceful places, but it's important to stay alert for unexpected situations.\n\nAfternoon:\nIn the afternoon, they might walk around the area near the lighthouse to ensure everything is secure and safe. This includes checking on nearby buildings, paths, and any other structures that could pose a risk.\n\nEvening:\nAs evening approaches, the keeper focuses more on preparing for nighttime operations. They make sure all lights are functioning correctly, especially during storms when visibility is low. They also prepare for the night watch.\n\nNighttime:\nThe most demanding part of their day begins as the sun sets. The keeper takes over the duties of the lighthouse. They will be responsible for keeping all navigation aids operational throughout the night and into early morning hours. \n\nMorning again:\nBy early morning, they switch off the lights and begin preparations for the next day's work. This includes ensuring everything is locked up securely and possibly having breakfast before going to sleep",
+      "pass": true,
+      "checks": [
+        {
+          "type": "max_repeat",
+          "pass": true,
+          "detail": "rasio pengulangan 0.00"
+        },
+        {
+          "type": "min_chars",
+          "pass": true,
+          "detail": "1621 karakter"
+        }
+      ],
+      "wall_ms": 25462.589200000017,
+      "finish": "length"
+    },
+    {
+      "suite": "s4",
+      "id": "s4-ja-1",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "インターネットの歴史について詳しく説明してください。",
+      "hinted": null,
+      "output": "もちろんです、インターネットの歴史は非常に興味深いもので、1960年代から始まりました。\n\n最初にインターネットが生まれたのは、アメリカの軍事研究機関ARPA（Defense Advanced Research Projects Agency）によって開発されました。この時期を「ARPANET」と呼びます。それ以前には、異なるネットワークが存在していましたが、 ARPANET はそれらを統合するための初期の試みでした。\n\n1970年代になると、ARPANETの技術が一般公開され、他の大学や企業でも使用されるようになります。インターネットという言葉自体は、1980年に誕生しました。この時代にはTCP/IP（Transmission Control Protocol/Internet Protocol）という通信規約が確立され、これは現在でも基本的な仕組みとなっています。\n\n1990年代に入ると、インターネットが急速に普及し始めました。この頃からウェブブラウザの発明と、HTMLの開発により、一般的なユーザーがインターネットにアクセスする方法が生まれました。さらに、サーチエンジンやオンラインショッピングなどの新しいサービスも登場し、インターネットの使用はますます広がりました。\n\n今日では、世界中でインターネットを利用しており、スマートフォンやタブレットをはじめとするモバイルデバイスも多く利用されています。また、AIやビッグデータといった最先端技術との融合により、インターネットの可能性は以前にもまして広がっています。\n\nこれだけインターネット",
+      "pass": true,
+      "checks": [
+        {
+          "type": "max_repeat",
+          "pass": true,
+          "detail": "rasio pengulangan 0.11"
+        },
+        {
+          "type": "min_chars",
+          "pass": true,
+          "detail": "678 karakter"
+        }
+      ],
+      "wall_ms": 25556.62359999999,
+      "finish": "length"
+    },
+    {
+      "suite": "s4",
+      "id": "s4-ja-2",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "ある灯台守の一日を描写してください。",
+      "hinted": null,
+      "output": "もちろん、そのような情景を描くのは難しいですが、できる限り良い物語を作りましょう。\n\nある日、燈台守は朝から早起きをして、その日の予定をチェックします。日が昇ると、彼は大きな窓から海を見つめます。海は静かで、青い色に輝いています。彼は風船の形に整えられた灯台へ向かい、まずは掃除を始めます。全ての部屋と staircase をきれいに保ち、設備をチェックし、必要なものを補充します。\n\n食事の時間には、静かな海岸線から聞こえる波の音に耳を傾けながら、静かに昼食を摂ります。その後、彼は灯台の周りを散歩します。海の景色や空を見渡すことで、一日がどのように始まったのかを思い出すでしょう。時には鳥たちのさえずりを聞きながら、単純な休息も取ることもあります。\n\n夜が訪れると、彼は灯台に戻り、点灯装置をチェックしてから、灯台を閉じます。その後は、風情のある灯台内の部屋でゆっくりと過ごします。そして、夜明けと共に、新しい日が始まります。\n\nこのような一日を通じて、彼は一人ですが、この灯台に身を置くことで深くつながっていることを感じます。",
+      "pass": true,
+      "checks": [
+        {
+          "type": "max_repeat",
+          "pass": true,
+          "detail": "rasio pengulangan 0.06"
+        },
+        {
+          "type": "min_chars",
+          "pass": true,
+          "detail": "466 karakter"
+        }
+      ],
+      "wall_ms": 23063.44219999999,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-id-1",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Berapa hasil 17 + 25?\nA) 32\nB) 42\nC) 52\nD) 41\nJawab hanya dengan huruf pilihan (A, B, C, atau D).",
+      "hinted": null,
+      "output": "B",
+      "pass": true,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": true,
+          "detail": "jawaban: B"
+        }
+      ],
+      "wall_ms": 3777.4445000000123,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-id-2",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Hewan manakah yang termasuk mamalia?\nA) Ular\nB) Paus\nC) Ikan hiu\nD) Katak\nJawab hanya dengan huruf pilihan (A, B, C, atau D).",
+      "hinted": null,
+      "output": "B",
+      "pass": true,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": true,
+          "detail": "jawaban: B"
+        }
+      ],
+      "wall_ms": 3765.830900000001,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-id-3",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Jika semua kucing adalah hewan dan Tom adalah kucing, maka Tom adalah...\nA) bukan hewan\nB) hewan\nC) anjing\nD) tidak diketahui\nJawab hanya dengan huruf pilihan (A, B, C, atau D).",
+      "hinted": null,
+      "output": "B",
+      "pass": true,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": true,
+          "detail": "jawaban: B"
+        }
+      ],
+      "wall_ms": 3890.962599999999,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-id-4",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Planet terdekat dari Matahari adalah?\nA) Venus\nB) Bumi\nC) Merkurius\nD) Mars\nJawab hanya dengan huruf pilihan (A, B, C, atau D).",
+      "hinted": null,
+      "output": "B",
+      "pass": false,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": false,
+          "detail": "jawaban: B"
+        }
+      ],
+      "wall_ms": 3756.205400000006,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-id-5",
+      "lang": "id",
+      "repeat": 0,
+      "prompt": "Berapa hasil 12 × 8?\nA) 86\nB) 96\nC) 106\nD) 98\nJawab hanya dengan huruf pilihan (A, B, C, atau D).",
+      "hinted": null,
+      "output": "B",
+      "pass": true,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": true,
+          "detail": "jawaban: B"
+        }
+      ],
+      "wall_ms": 3719.7468000000226,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-en-1",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "What is 9 × 7?\nA) 56\nB) 63\nC) 72\nD) 49\nAnswer with only the letter of the correct option (A, B, C, or D).",
+      "hinted": null,
+      "output": "B",
+      "pass": true,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": true,
+          "detail": "jawaban: B"
+        }
+      ],
+      "wall_ms": 3699.7485999999917,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-en-2",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Which of these is a prime number?\nA) 21\nB) 27\nC) 29\nD) 33\nAnswer with only the letter of the correct option (A, B, C, or D).",
+      "hinted": null,
+      "output": "C",
+      "pass": true,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": true,
+          "detail": "jawaban: C"
+        }
+      ],
+      "wall_ms": 3699.2362999999896,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-en-3",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "At standard pressure, water freezes at what temperature in Celsius?\nA) 0\nB) 32\nC) 100\nD) -10\nAnswer with only the letter of the correct option (A, B, C, or D).",
+      "hinted": null,
+      "output": "A",
+      "pass": true,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": true,
+          "detail": "jawaban: A"
+        }
+      ],
+      "wall_ms": 3747.5278999999864,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-en-4",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "If all roses are flowers and some flowers fade quickly, which statement must be true?\nA) All roses fade quickly\nB) Some roses are flowers\nC) No flowers are roses\nD) All flowers are roses\nAnswer with only the letter of the correct option (A, B, C, or D).",
+      "hinted": null,
+      "output": "A",
+      "pass": false,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": false,
+          "detail": "jawaban: A"
+        }
+      ],
+      "wall_ms": 3870.6108999999706,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-en-5",
+      "lang": "en",
+      "repeat": 0,
+      "prompt": "Which planet is known as the Red Planet?\nA) Venus\nB) Jupiter\nC) Mars\nD) Saturn\nAnswer with only the letter of the correct option (A, B, C, or D).",
+      "hinted": null,
+      "output": "C",
+      "pass": true,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": true,
+          "detail": "jawaban: C"
+        }
+      ],
+      "wall_ms": 3662.2837999999756,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-ja-1",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "15 + 28 はいくつですか？\nA) 33\nB) 43\nC) 53\nD) 44\n正しい選択肢の記号（A、B、C、D）だけで答えてください。",
+      "hinted": null,
+      "output": "D) 44",
+      "pass": false,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": false,
+          "detail": "jawaban: D"
+        }
+      ],
+      "wall_ms": 4054.0492000000086,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-ja-2",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "次のうち哺乳類はどれですか？\nA) ペンギン\nB) サメ\nC) イルカ\nD) カエル\n正しい選択肢の記号（A、B、C、D）だけで答えてください。",
+      "hinted": null,
+      "output": "B",
+      "pass": false,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": false,
+          "detail": "jawaban: B"
+        }
+      ],
+      "wall_ms": 3741.9673000000184,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-ja-3",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "日本の首都はどこですか？\nA) 大阪\nB) 京都\nC) 東京\nD) 名古屋\n正しい選択肢の記号（A、B、C、D）だけで答えてください。",
+      "hinted": null,
+      "output": "C",
+      "pass": true,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": true,
+          "detail": "jawaban: C"
+        }
+      ],
+      "wall_ms": 3827.3452999999863,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-ja-4",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "1週間は何日ですか？\nA) 5\nB) 6\nC) 7\nD) 8\n正しい選択肢の記号（A、B、C、D）だけで答えてください。",
+      "hinted": null,
+      "output": "C",
+      "pass": true,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": true,
+          "detail": "jawaban: C"
+        }
+      ],
+      "wall_ms": 4110.334700000007,
+      "finish": "stop"
+    },
+    {
+      "suite": "s5",
+      "id": "s5-ja-5",
+      "lang": "ja",
+      "repeat": 0,
+      "prompt": "標準気圧で水が沸騰する温度（摂氏）は？\nA) 50\nB) 80\nC) 100\nD) 120\n正しい選択肢の記号（A、B、C、D）だけで答えてください。",
+      "hinted": null,
+      "output": "C",
+      "pass": true,
+      "checks": [
+        {
+          "type": "mcq",
+          "pass": true,
+          "detail": "jawaban: C"
+        }
+      ],
+      "wall_ms": 3899.4911999999895,
+      "finish": "stop"
+    }
+  ]
+}

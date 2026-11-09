@@ -58,12 +58,14 @@ test('set uji: semua berkas valid, id unik, setiap butir punya cek yang dikenal'
 });
 
 /* ---------- harness terhadap llama-server PALSU (bukan llama-server asli) ---------- */
-const answer = (u) => /nama|name/i.test(u) ? 'Namaku Celcius, aku diciptakan oleh Reamura.' : /huruf pilihan|letter of the correct|記号/.test(u) ? 'B'
+const answer = (u) => /Reply only in English/.test(u) ? 'Hello, I am Celcius and I am happy to talk with you about the things that you like today.' : /nama|name/i.test(u) ? 'Namaku Celcius, aku diciptakan oleh Reamura.' : /huruf pilihan|letter of the correct|記号/.test(u) ? 'B'
   : 'Halo, ini jawaban uji yang cukup panjang untuk pemeriksaan pengulangan. Hari ini cerah dan kita bisa membahas banyak hal menarik bersama sambil minum teh.';
-function mock() {
+function mock(mode = 'ok') {
   return http.createServer((req, res) => {
+    if (req.method === 'GET' && req.url === '/health') { res.statusCode = mode === 'notready' ? 503 : 200; return res.end('{}'); }
     if (req.method === 'GET' && req.url === '/props') { res.setHeader('Content-Type', 'application/json'); return res.end('{"model_path":"mock.gguf"}'); }
     let b = ''; req.on('data', (c) => (b += c)); req.on('end', () => {
+      if (mode === 'error500') { res.statusCode = 500; return res.end('boom'); }
       const j = JSON.parse(b || '{}'), user = j.messages[j.messages.length - 1].content, text = answer(user);
       const timings = { prompt_n: 30, cache_n: 0, prompt_ms: 100, predicted_n: 10, predicted_ms: 100, prompt_per_second: 300, predicted_per_second: 100 };
       if (!j.stream) { res.setHeader('Content-Type', 'application/json'); return res.end(JSON.stringify({ choices: [{ message: { content: text }, finish_reason: 'stop' }], timings })); }
@@ -102,4 +104,39 @@ test('report: baseline vs dirinya sendiri = tanpa regresi (exit 0); kandidat yan
   fs.writeFileSync(path.join(dir, 'a.json'), JSON.stringify(mk(0.9, 100, [0.82, 0.95]))); fs.writeFileSync(path.join(dir, 'b.json'), JSON.stringify(mk(0.5, 100, [0.4, 0.6])));
   assert.strictEqual((await run(['eval/report.js', path.join(dir, 'a.json'), path.join(dir, 'a.json')])).code, 0);
   assert.strictEqual((await run(['eval/report.js', path.join(dir, 'a.json'), path.join(dir, 'b.json')])).code, 3);
+});
+
+test('run-quality: server tidak siap -> kode 2 dan tidak menulis hasil', async () => {
+  const srv = mock('notready'), port = await listen(srv), out = fs.mkdtempSync(path.join(os.tmpdir(), 'ns-'));
+  const r = await run(['eval/run-quality.js', '--base', `http://127.0.0.1:${port}`, '--wait', '1', '--out', out]); srv.close();
+  assert.strictEqual(r.code, 2, r.out); assert.deepStrictEqual(fs.readdirSync(out), []);
+});
+test('run-quality: permintaan gagal berturut-turut -> run TIDAK VALID (kode 4), error tidak dihitung sebagai jawaban salah, report menolak', async () => {
+  const srv = mock('error500'), port = await listen(srv), out = fs.mkdtempSync(path.join(os.tmpdir(), 'er-'));
+  const r = await run(['eval/run-quality.js', '--base', `http://127.0.0.1:${port}`, '--suites', 's1,s5', '--out', out]); srv.close();
+  assert.strictEqual(r.code, 4, r.out); const jf = fs.readdirSync(out).find((f) => f.endsWith('.json')); assert.match(jf, /TIDAK-VALID/);
+  const d = JSON.parse(fs.readFileSync(path.join(out, jf), 'utf8'));
+  assert.strictEqual(d.valid, false); assert.strictEqual(d.aborted, true); assert.strictEqual(d.suites.s1.n, 0, 'error tidak boleh dihitung sebagai butir yang dinilai'); assert.strictEqual(d.suites.s1.errors, 3);
+  assert.strictEqual((await run(['eval/report.js', path.join(out, jf), path.join(out, jf)])).code, 5);
+});
+test('report: berkas lama dengan semua suite 0% (tanpa penanda valid) ditolak kecuali --force', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'z0-')), z = { kind: 'quality', label: 'nol', suites: { s1: { pass: 0, n: 18, rate: 0, ci95: [0, 0.18] } } };
+  fs.writeFileSync(path.join(dir, 'z.json'), JSON.stringify(z));
+  assert.strictEqual((await run(['eval/report.js', path.join(dir, 'z.json'), path.join(dir, 'z.json')])).code, 5);
+});
+
+test('verifier lang: jawaban latin sangat pendek dilewati, bahasa yang salah tetap gagal', () => {
+  const r = V.check({ type: 'lang', value: 'en' }, 'Paris'); assert.ok(r.pass && r.skipped);
+  assert.ok(!V.check({ type: 'lang', value: 'en' }, '了解です。').pass, 'jawaban Jepang untuk permintaan Inggris harus gagal');
+  assert.ok(!V.check({ type: 'lang', value: 'en' }, 'Halo, aku Celcius dan aku senang bisa bertemu dengan kamu hari ini.').pass);
+});
+test('run-quality --lang-hint: petunjuk bahasa ditambahkan hanya pada prompt yang meminta bahasa; mengubah hasil S2', async () => {
+  const srv = mock(), port = await listen(srv), o1 = fs.mkdtempSync(path.join(os.tmpdir(), 'h1-')), o2 = fs.mkdtempSync(path.join(os.tmpdir(), 'h2-'));
+  const a = ['eval/run-quality.js', '--base', `http://127.0.0.1:${port}`, '--suites', 's2'];
+  await run([...a, '--out', o1]); await run([...a, '--lang-hint', '--out', o2]); srv.close();
+  const load = (d) => JSON.parse(fs.readFileSync(path.join(d, fs.readdirSync(d).find((f) => f.endsWith('.json'))), 'utf8'));
+  const x = load(o1), y = load(o2), item = (d, id) => d.items.find((i) => i.id === id);
+  assert.strictEqual(x.lang_hint, false); assert.strictEqual(y.lang_hint, true);
+  assert.strictEqual(item(x, 's2-1').pass, false); assert.strictEqual(item(y, 's2-1').pass, true, 'dengan petunjuk, mock menjawab Inggris');
+  assert.strictEqual(item(y, 's2-1').hinted, 'English'); assert.strictEqual(item(y, 's2-6').hinted, null, 'prompt tanpa permintaan bahasa tidak diberi petunjuk');
 });

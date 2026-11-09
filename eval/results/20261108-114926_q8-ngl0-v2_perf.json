@@ -1,0 +1,316 @@
+{
+  "kind": "perf",
+  "label": "q8-ngl0-v2",
+  "base": "http://127.0.0.1:8089",
+  "runs": 3,
+  "node": "v24.19.0",
+  "created": "2026-11-08T03:47:05.039Z",
+  "server_props": {
+    "model_path": "C:\\Users\\satri\\AppData\\Roaming\\Celcius\\models\\celcius-q8_0.gguf",
+    "build_info": "b12068-4402e6540"
+  },
+  "scenarios": {
+    "cold": {
+      "note": "awalan unik = cache tidak terpakai (TTFT dingin)",
+      "prompt_n": 224,
+      "cache_n": 4,
+      "prompt_ms": 4476.299,
+      "prompt_tps": 50.04133995517279,
+      "gen_tps": 11.461411882209433,
+      "wall_ms": 5124,
+      "resources": {
+        "samples": 30,
+        "gpu_peak_mib": 140,
+        "gpu_mean_mib": 140,
+        "gpu_total_mib": 6144,
+        "llama_ram_peak_mb": 3389.5546875,
+        "cpu_mean_pct": 91.94060991818964,
+        "cpu_peak_pct": 100
+      }
+    },
+    "warm_same": {
+      "note": "permintaan identik berulang",
+      "prompt_n": 1,
+      "cache_n": 228,
+      "prompt_ms": 79.909,
+      "prompt_tps": 12.514234942246805,
+      "gen_tps": 12.783146699391521,
+      "wall_ms": 643,
+      "resources": {
+        "samples": 13,
+        "gpu_peak_mib": 140,
+        "gpu_mean_mib": 140,
+        "gpu_total_mib": 6144,
+        "llama_ram_peak_mb": 3397.875,
+        "cpu_mean_pct": 89.59262636943406,
+        "cpu_peak_pct": 97.98582017402514
+      }
+    },
+    "kb_toggle": {
+      "note": "efek menyisipkan teks KB ke system prompt pada riwayat 0/3/6 pasang; tiap angka = satu baris utuh (median menurut prompt_ms); baris mentah di rows_*",
+      "hist0": {
+        "control_stable_system": {
+          "prompt_n": 9,
+          "cache_n": 223,
+          "prompt_ms": 257.528,
+          "prompt_tps": 34.947656177192385,
+          "gen_tps": 13.21088728093518,
+          "wall_ms": 791
+        },
+        "with_kb_in_system": {
+          "prompt_n": 50,
+          "cache_n": 211,
+          "prompt_ms": 3747.658,
+          "prompt_tps": 13.341665648252857,
+          "gen_tps": 11.188077984100142,
+          "wall_ms": 4389
+        },
+        "rows_control": [
+          {
+            "prompt_n": 9,
+            "cache_n": 223,
+            "prompt_ms": 249.147,
+            "prompt_tps": 36.123252537658495,
+            "gen_tps": 12.93214135938975,
+            "wall_ms": 795
+          },
+          {
+            "prompt_n": 9,
+            "cache_n": 223,
+            "prompt_ms": 258.495,
+            "prompt_tps": 34.816921023617475,
+            "gen_tps": 12.429705575788354,
+            "wall_ms": 826
+          },
+          {
+            "prompt_n": 9,
+            "cache_n": 223,
+            "prompt_ms": 257.528,
+            "prompt_tps": 34.947656177192385,
+            "gen_tps": 13.21088728093518,
+            "wall_ms": 791
+          }
+        ],
+        "rows_kb": [
+          {
+            "prompt_n": 50,
+            "cache_n": 211,
+            "prompt_ms": 3634.375,
+            "prompt_tps": 13.757523645743767,
+            "gen_tps": 12.967573655818365,
+            "wall_ms": 4177
+          },
+          {
+            "prompt_n": 50,
+            "cache_n": 211,
+            "prompt_ms": 3760.622,
+            "prompt_tps": 13.295672896664435,
+            "gen_tps": 11.809383060958348,
+            "wall_ms": 4363
+          },
+          {
+            "prompt_n": 50,
+            "cache_n": 211,
+            "prompt_ms": 3747.658,
+            "prompt_tps": 13.341665648252857,
+            "gen_tps": 11.188077984100142,
+            "wall_ms": 4389
+          }
+        ]
+      },
+      "hist3": {
+        "control_stable_system": {
+          "prompt_n": 9,
+          "cache_n": 374,
+          "prompt_ms": 268.932,
+          "prompt_tps": 33.46570880371246,
+          "gen_tps": 12.283072171822633,
+          "wall_ms": 846
+        },
+        "with_kb_in_system": {
+          "prompt_n": 203,
+          "cache_n": 211,
+          "prompt_ms": 905.637,
+          "prompt_tps": 224.15161924700516,
+          "gen_tps": 12.067238653778857,
+          "wall_ms": 1503
+        },
+        "rows_control": [
+          {
+            "prompt_n": 9,
+            "cache_n": 374,
+            "prompt_ms": 268.932,
+            "prompt_tps": 33.46570880371246,
+            "gen_tps": 12.283072171822633,
+            "wall_ms": 846
+          },
+          {
+            "prompt_n": 9,
+            "cache_n": 374,
+            "prompt_ms": 299.197,
+            "prompt_tps": 30.080515513190306,
+            "gen_tps": 12.279452266260627,
+            "wall_ms": 886
+          },
+          {
+            "prompt_n": 9,
+            "cache_n": 376,
+            "prompt_ms": 264.665,
+            "prompt_tps": 34.00525192224132,
+            "gen_tps": 12.490186282206837,
+            "wall_ms": 839
+          }
+        ],
+        "rows_kb": [
+          {
+            "prompt_n": 203,
+            "cache_n": 209,
+            "prompt_ms": 914.156,
+            "prompt_tps": 222.0627551533874,
+            "gen_tps": 12.641951050365535,
+            "wall_ms": 1479
+          },
+          {
+            "prompt_n": 203,
+            "cache_n": 209,
+            "prompt_ms": 878.36,
+            "prompt_tps": 231.11252789289128,
+            "gen_tps": 12.924524469817543,
+            "wall_ms": 1427
+          },
+          {
+            "prompt_n": 203,
+            "cache_n": 211,
+            "prompt_ms": 905.637,
+            "prompt_tps": 224.15161924700516,
+            "gen_tps": 12.067238653778857,
+            "wall_ms": 1503
+          }
+        ]
+      },
+      "hist6": {
+        "control_stable_system": {
+          "prompt_n": 9,
+          "cache_n": 530,
+          "prompt_ms": 262.482,
+          "prompt_tps": 34.28806546734633,
+          "gen_tps": 12.915367442203731,
+          "wall_ms": 816
+        },
+        "with_kb_in_system": {
+          "prompt_n": 359,
+          "cache_n": 210,
+          "prompt_ms": 1728.416,
+          "prompt_tps": 207.7046266639513,
+          "gen_tps": 12.635105376778844,
+          "wall_ms": 2308
+        },
+        "rows_control": [
+          {
+            "prompt_n": 9,
+            "cache_n": 531,
+            "prompt_ms": 273.604,
+            "prompt_tps": 32.89425593193082,
+            "gen_tps": 12.711233461777322,
+            "wall_ms": 844
+          },
+          {
+            "prompt_n": 9,
+            "cache_n": 530,
+            "prompt_ms": 262.482,
+            "prompt_tps": 34.28806546734633,
+            "gen_tps": 12.915367442203731,
+            "wall_ms": 816
+          },
+          {
+            "prompt_n": 9,
+            "cache_n": 531,
+            "prompt_ms": 262.228,
+            "prompt_tps": 34.32127766676327,
+            "gen_tps": 12.684031710079275,
+            "wall_ms": 822
+          }
+        ],
+        "rows_kb": [
+          {
+            "prompt_n": 359,
+            "cache_n": 210,
+            "prompt_ms": 1780.172,
+            "prompt_tps": 201.66590644050126,
+            "gen_tps": 12.497567437766577,
+            "wall_ms": 2361
+          },
+          {
+            "prompt_n": 359,
+            "cache_n": 209,
+            "prompt_ms": 1033.021,
+            "prompt_tps": 347.5243968902859,
+            "gen_tps": 12.769318610917038,
+            "wall_ms": 1596
+          },
+          {
+            "prompt_n": 359,
+            "cache_n": 210,
+            "prompt_ms": 1728.416,
+            "prompt_tps": 207.7046266639513,
+            "gen_tps": 12.635105376778844,
+            "wall_ms": 2308
+          }
+        ]
+      },
+      "resources": {
+        "samples": 127,
+        "gpu_peak_mib": 147,
+        "gpu_mean_mib": 143.8188976377953,
+        "gpu_total_mib": 6144,
+        "llama_ram_peak_mb": 3580.421875,
+        "cpu_mean_pct": 85.24314640295248,
+        "cpu_peak_pct": 99.27272727272727
+      }
+    },
+    "stream_ttft": {
+      "note": "streaming seperti aplikasi, awalan hangat",
+      "ttft_ms_median": 128.53250000000116,
+      "stream_tps_median": 12.342882384883355,
+      "resources": {
+        "samples": 44,
+        "gpu_peak_mib": 147,
+        "gpu_mean_mib": 147,
+        "gpu_total_mib": 6144,
+        "llama_ram_peak_mb": 3601.75390625,
+        "cpu_mean_pct": 84.73446649672654,
+        "cpu_peak_pct": 94.78932132518494
+      }
+    },
+    "throughput": {
+      "note": "generasi 128 token",
+      "gen_tps_median": 12.164305865436726,
+      "prompt_n": 1,
+      "cache_n": 223,
+      "prompt_ms": 72.547,
+      "prompt_tps": 13.877324451845684,
+      "gen_tps": 12.164305865436726,
+      "wall_ms": 10517,
+      "resources": {
+        "samples": 62,
+        "gpu_peak_mib": 147,
+        "gpu_mean_mib": 147,
+        "gpu_total_mib": 6144,
+        "llama_ram_peak_mb": 3609.640625,
+        "cpu_mean_pct": 83.80749014100518,
+        "cpu_peak_pct": 97.45609716067618
+      }
+    }
+  },
+  "gpu_before_mib": 140,
+  "resources_total": {
+    "samples": 276,
+    "gpu_peak_mib": 147,
+    "gpu_mean_mib": 144.44565217391303,
+    "gpu_total_mib": 6144,
+    "llama_ram_peak_mb": 3609.640625,
+    "cpu_mean_pct": 85.74997213892141,
+    "cpu_peak_pct": 100
+  },
+  "gpu_after_mib": 147
+}

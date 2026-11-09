@@ -1,6 +1,6 @@
 'use strict';
 const test = require('node:test'), assert = require('node:assert'), fs = require('fs'), os = require('os'), path = require('path'), crypto = require('crypto');
-const { sha256File, buildManifest, copyVerified } = require('../scripts/snapshot-baseline');
+const { sha256File, buildManifest, copyVerified, backupTargetProblem } = require('../scripts/snapshot-baseline');
 const tmp = () => fs.mkdtempSync(path.join(os.tmpdir(), 'celcius-'));
 const sha = (b) => crypto.createHash('sha256').update(b).digest('hex').toUpperCase();
 
@@ -36,4 +36,9 @@ test('cadangan: menyalin + verifikasi; tidak pernah menimpa berkas berbeda; sumb
   await assert.rejects(() => copyVerified(src, dir, p.wsha), /tidak ditimpa/);
   assert.strictEqual(sha(fs.readFileSync(src)), p.wsha, 'sumber tidak boleh berubah');
   assert.strictEqual(fs.readFileSync(path.join(dir, 'adapter_model.safetensors'), 'utf8'), 'rusak', 'berkas cadangan berbeda tidak boleh ditimpa');
+});
+
+test('lokasi cadangan: akar tidak ada -> fatal dengan pesan jelas; drive sama -> peringatan; lokasi berbeda yang ada -> aman', () => {
+  const r = backupTargetProblem('E:\\cadangan', '/x/adapter.safetensors', () => false); assert.strictEqual(r.fatal, true); assert.match(r.msg, /tidak ada/);
+  const same = backupTargetProblem(os.tmpdir(), path.join(os.tmpdir(), 'a.bin'), () => true); assert.strictEqual(same.fatal, false); assert.strictEqual(same.sameDrive, true); assert.match(same.msg, /drive yang sama/);
 });

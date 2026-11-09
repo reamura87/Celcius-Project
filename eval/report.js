@@ -7,6 +7,10 @@ const fs = require('fs'); const A = process.argv.slice(2).filter((x) => !x.start
 const margin = mi >= 0 ? +process.argv[mi + 1] : 0.10;
 if (A.length < 2) { console.log('pakai: node eval/report.js <baseline.json> <kandidat.json> [--margin 0.10]'); process.exit(1); }
 const [a, b] = A.map((f) => JSON.parse(fs.readFileSync(f, 'utf8')));
+for (const [n, x] of [['A', a], ['B', b]]) {          // jangan membandingkan run yang gagal
+  const allZero = x.kind === 'quality' && Object.values(x.suites || {}).length && Object.values(x.suites).every((t) => t.pass === 0);
+  if (x.valid === false || (x.kind === 'quality' && allZero && !process.argv.includes('--force'))) { console.error(`Berkas ${n} (${x.label}) tampak TIDAK VALID (${x.valid === false ? 'ditandai gagal oleh runner' : 'semua suite 0%, kemungkinan server belum siap'}). Tidak dibandingkan. Ulangi run-nya, atau pakai --force bila memang sengaja.`); process.exit(5); }
+}
 if (a.kind !== b.kind) { console.error('jenis berkas berbeda:', a.kind, 'vs', b.kind); process.exit(1); }
 const pct = (x) => (x * 100).toFixed(0) + '%', f = (x, n = 0) => (x == null ? '–' : (+x).toFixed(n));
 if (a.kind === 'quality') {
